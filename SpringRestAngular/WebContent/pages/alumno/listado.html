@@ -1,0 +1,58 @@
+<div class="row">
+	<div class="col-xs-12">
+		<div class="form-group">
+			<label class="control-label col-sm-2">Filtrar por Nombre:</label>
+			<div class="col-sm-10">
+				<input ng-model="alumno.nombre" class="form-control">
+			</div>
+		</div>
+	</div>
+</div>
+<br>
+
+<a href="#/" class="btn btn-info">Atras</a>
+<a ng-href="#/Alumno/new" class="btn btn-success">Nuevo Registro</a>
+
+<table class="table table-bordered table-striped">
+	<thead>
+		<tr>
+			<th>Identificaci&oacute;n</th>
+			<th>Nombre</th>
+			<th>Apellidos</th>
+			<th>Fecha Nacimiento</th>
+			<th>Acci&oacute;n</th>
+		</tr>
+	</thead>
+	<tfoot>
+		<tr>
+			<td colspan="4">El Nro de alumnos es:</td>
+			<td ng-bind="alumnos.length"></td>
+		</tr>
+	</tfoot>
+	<tbody>
+<!-- 	| filteri18n:{apellidoPrimero:filtro.ape1} -->
+<!-- ng-style="{color:($odd?'red':'green')}" -->
+		<tr ng-repeat="alumno in alumnos | filteri18n:{nombre : alumno.nombre}">
+			<td><a ng-href="#/Alumno/edit/{{alumno.identificacion}}">{{alumno.identificacion}}</a></td>
+			<td>{{alumno.nombre}}</td>
+			<td>{{alumno.apellidoPrimero + ' ' +alumno.apellidoSegundo}}</td>
+			<td>{{alumno.fechaNacimiento}}</td>
+			<td>
+				<button ng-click="borrar(alumno.identificacion)" class="btn btn-danger">Borrar</button>
+				<a ng-href="#/Alumno/edit/{{alumno.identificacion}}">
+					<button class="btn btn-success">Editar</button>
+				</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<div ng-show="bussinessMessages.length > 0">
+	<div>Se han producido los siguientes errores</div>
+	<ul>
+		<li ng-repeat="bussinessMessage in bussinessMessages"><strong
+			ng-hide="businessMessage.fieldName == null">{{bussinessMessage.fieldName}}:</strong>
+			{{bussinessMessage.message}}.</li>
+	</ul>
+	<button ng-click="bussinessMessages = []">Quitar mensajes</button>
+</div>

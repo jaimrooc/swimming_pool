@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+	<display-name>SpringRestAngular</display-name>
+	
+	<session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    
+    <!-- Clase encargada cargar Spring y todos sus modulos -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener> 
+    
+    <!-- Se asigna la ruta del archivo de contexto de configuracion 'applicationContext.xml' -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/applicationContext.xml</param-value>
+    </context-param>
+    
+    <!-- Servlet encargado de manejar las peticiones REST -->
+    <servlet>
+        <servlet-name>dispatcher</servlet-name> 
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup> 
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name> 
+        <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>
+	
+	<welcome-file-list>
+		<welcome-file>pages/index.html</welcome-file>
+	</welcome-file-list>
+</web-app>

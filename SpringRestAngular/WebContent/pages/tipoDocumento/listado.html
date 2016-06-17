@@ -1,0 +1,51 @@
+<div class="row">
+	<div class="col-xs-12">
+		<div class="form-group">
+			<label class="control-label col-sm-2">Filtrar por Descripci&oacute;n:</label>
+			<div class="col-sm-10">
+				<input ng-model="tiposDocumento.descripcion" class="form-control">
+			</div>
+		</div>
+	</div>
+</div>
+<br>
+
+<a href="#/" class="btn btn-info">Atras</a>
+<a href="#/TiposDocumento/new" class="btn btn-success">Nuevo Registro</a>
+
+<table class="table table-bordered table-striped">
+	<thead>
+		<tr>
+			<th>C&oacute;digo</th>
+			<th>Descripci&oacute;</th>
+			<th>Acci&oacute;n</th>
+		</tr>
+	</thead>
+	<tfoot>
+		<tr>
+			<td colspan="2">El Nro de tipos de documento es:</td>
+			<td ng-bind="tiposDocumentos.length"></td>
+		</tr>
+	</tfoot>
+	<tbody>
+<!-- 	ng-style="{color:($odd?'red':'green')}"> -->
+		<tr ng-repeat="tipoDoc in tiposDocumentos | filteri18n:{descripcion : tiposDocumento.descripcion}">
+			<td><a ng-href="#/TiposDocumento/edit/{{tipoDoc.codigo}}">{{tipoDoc.codigo}}</a></td>
+			<td>{{tipoDoc.descripcion}}</td>
+			<td>
+				<button ng-click="borrar(tipoDoc.codigo)" class="btn btn-danger">Borrar</button>
+				<a ng-href="#/TiposDocumento/edit/{{tipoDoc.codigo}}" class="btn btn-success">Editar</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<div ng-show="bussinessMessages.length > 0">
+	<div>Se han producido los siguientes errores</div>
+	<ul>
+		<li ng-repeat="bussinessMessage in bussinessMessages"><strong
+			ng-hide="businessMessage.fieldName == null">{{bussinessMessage.fieldName}}:</strong>
+			{{bussinessMessage.message}}.</li>
+	</ul>
+	<button ng-click="bussinessMessages = []">Quitar mensajes</button>
+</div>

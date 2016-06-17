@@ -1,0 +1,132 @@
+<div class="row">
+	<div class="col-xs-12">
+		<form name="form" novalidate class="form-horizontal">
+		    <fieldset>
+		        <legend>Datos del Profesor</legend>
+		        
+		        <div class="form-group">
+			        <label for="identificacion" class="control-label col-sm-2">Identificaci&oacute;n:</label>
+			        <div class="col-sm-10">
+				        <input id="identificacion" name="identificacion" type="text" ng-model="profesor.identificacion" class="form-control" required maxlength="10"/>
+				        <span ng-show="form.identificacion.$error.required && form.identificacion.$dirty">El campo es requerido</span>
+				        <span ng-show="form.identificacion.$error.maxlength">La longitud maxima es de 10 digitos</span>
+			        </div>
+		        </div>
+		        
+		        <div class="form-group">
+			        <label for="nombre" class="control-label col-sm-2">Nombre:</label>
+			        <div class="col-sm-10">
+				        <input id="nombre" name="nombre" type="text" ng-model="profesor.nombre" class="form-control" required maxlength="200"/>
+				        <span ng-show="form.nombre.$error.required && form.nombre.$dirty">El campo es requerido</span>
+				        <span ng-show="form.nombre.$error.maxlength">La longitud maxima es de 200 caracteres</span>
+			        </div>
+		        </div>
+		        
+		        <div class="form-group">
+			        <label for="apellidoPrimero" class="control-label col-sm-2">Primer Apellido:</label>
+			        <div class="col-sm-10">
+			        	<input id="apellidoPrimero" name="apellidoPrimero" type="text" ng-model="profesor.apellidoPrimero" class="form-control" required maxlength="100"/>
+				        <span ng-show="form.apellidoPrimero.$error.required && form.apellidoPrimero.$dirty">El campo es requerido</span>
+				        <span ng-show="form.apellidoPrimero.$error.maxlength">La longitud maxima es de 100 caracteres</span>
+			        </div>
+		        </div>
+
+		        <div class="form-group">
+			        <label for="apellidoSegundo" class="control-label col-sm-2">Segundo Apellido:</label>
+			        <div class="col-sm-10">
+			        	<input id="apellidoSegundo" name="apellidoSegundo" type="text" ng-model="profesor.apellidoSegundo" class="form-control" required maxlength="100"/>
+				        <span ng-show="form.apellidoSegundo.$error.required && form.apellidoSegundo.$dirty">El campo es requerido</span>
+				        <span ng-show="form.apellidoSegundo.$error.maxlength">La longitud maxima es de 100 caracteres</span>
+			        </div>
+		        </div>
+
+		        <div class="form-group">
+			        <label for="tipoIdentificacion" class="control-label col-sm-2">Tipo Identificaci&oacute;n:</label>
+			        <div class="col-sm-10">
+				       	<select id="tipoIdentificacion" name="tipoIdentificacion" type="checkbox" ng-model="profesor.tipoIdentificacion" ng-options="tipoDoc.codigo as tipoDoc.descripcion for tipoDoc in tiposDocumentos" class="control-label col-sm-2" required >
+				       		<option value="">Seleccione</option>
+				       	</select>
+			        	<span ng-show="form.tipoIdentificacion.$error.required && form.tipoIdentificacion.$dirty">El campo es requerido</span>
+		        	</div>
+		       	</div>
+		       	
+		        <div class="form-group">
+			        <label for="fechaNacimiento" class="control-label col-sm-2">Fecha de nacimiento:</label>
+			        <div class="col-sm-10">
+			        	<input id="fechaNacimiento" name="fechaNacimiento" type="text" ng-model="profesor.fechaNacimiento" ca-datepicker="dd/MM/yyyy" class="control-label col-sm-2"/>
+			        </div>
+		        </div>
+		    </fieldset>
+		    
+		    <a href="#/" class="btn btn-info">Atras</a>
+		    <button ng-click="limpiar()" class="btn btn-info">Limpiar</button>
+		    <button ng-click="guardar()" ng-disabled="form.$invalid" class="btn btn-success">Guardar</button>
+		</form>
+
+		<div ng-show="bussinessMessages.length > 0">
+		    <div>Se han producido los siguientes errores</div>
+		    <ul>
+		        <li ng-repeat="bussinessMessage in bussinessMessages">
+		            <strong ng-hide="businessMessage.fieldName == null">{{bussinessMessage.fieldName}}:</strong>
+		            {{bussinessMessage.message}}.
+		        </li>
+		    </ul>
+		    <button ng-click="bussinessMessages = []" >Quitar mensajes</button>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="form-group">
+			<label class="control-label col-sm-2">Filtrar por Nombre:</label>
+			<div class="col-sm-10">
+				<input ng-model="filtroPersonalizado" class="form-control">
+			</div>
+		</div>
+	</div>
+</div>
+<br>
+<table class="table table-bordered table-striped">
+	<thead>
+		<tr>
+			<th>Identificaci&oacute;n</th>
+			<th>Nombre</th>
+			<th>Apellidos</th>
+			<th>Fecha Nacimiento</th>
+			<th>Acci&oacute;n</th>
+		</tr>
+	</thead>
+	<tfoot>
+		<tr>
+			<td colspan="4">El Nro de profesores es:</td>
+			<td ng-bind="profesores.length"></td>
+		</tr>
+	</tfoot>
+	<tbody>
+<!-- 	| filteri18n:{apellidoPrimero:filtro.ape1} -->
+<!-- ng-style="{color:($odd?'red':'green')}" -->
+		<tr ng-repeat="profesor in profesores | filteri18n:{nombre : filtroPersonalizado}">
+			<td><a ng-href="#/Alumno/edit/{{profesor.identificacion}}">{{profesor.identificacion}}</a></td>
+			<td>{{profesor.nombre}}</td>
+			<td>{{profesor.apellidoPrimero + ' ' +profesor.apellidoSegundo}}</td>
+			<td>{{profesor.fechaNacimiento}}</td>
+			<td>
+				<button ng-click="borrar(profesor.identificacion)" class="btn btn-danger">Borrar</button>
+				<a ng-href="#/Profesor/edit/{{profesor.identificacion}}">
+					<button class="btn btn-success">Editar</button>
+				</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<div ng-show="bussinessMessages.length > 0">
+	<div>Se han producido los siguientes errores</div>
+	<ul>
+		<li ng-repeat="bussinessMessage in bussinessMessages"><strong
+			ng-hide="businessMessage.fieldName == null">{{bussinessMessage.fieldName}}:</strong>
+			{{bussinessMessage.message}}.</li>
+	</ul>
+	<button ng-click="bussinessMessages = []">Quitar mensajes</button>
+</div>

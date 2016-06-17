@@ -1,0 +1,76 @@
+<div class="row">
+	<div class="col-xs-12">
+		<form name="form" novalidate class="form-horizontal">
+		    <fieldset>
+		        <legend>Datos del Alumno</legend>
+		        
+		        <div class="form-group">
+			        <label for="identificacion" class="control-label col-sm-2">Identificaci&oacute;n:</label>
+			        <div class="col-sm-10">
+				        <input id="identificacion" name="identificacion" type="text" ng-model="alumno.identificacion" class="form-control" required maxlength="10"/>
+				        <span ng-show="form.identificacion.$error.required && form.identificacion.$dirty">El campo es requerido</span>
+				        <span ng-show="form.identificacion.$error.maxlength">La longitud maxima es de 10 digitos</span>
+			        </div>
+		        </div>
+		        
+		        <div class="form-group">
+			        <label for="nombre" class="control-label col-sm-2">Nombre:</label>
+			        <div class="col-sm-10">
+				        <input id="nombre" name="nombre" type="text" ng-model="alumno.nombre" class="form-control" required maxlength="200"/>
+				        <span ng-show="form.nombre.$error.required && form.nombre.$dirty">El campo es requerido</span>
+				        <span ng-show="form.nombre.$error.maxlength">La longitud maxima es de 200 caracteres</span>
+			        </div>
+		        </div>
+		        
+		        <div class="form-group">
+			        <label for="apellidoPrimero" class="control-label col-sm-2">Primer Apellido:</label>
+			        <div class="col-sm-10">
+			        	<input id="apellidoPrimero" name="apellidoPrimero" type="text" ng-model="alumno.apellidoPrimero" class="form-control" required maxlength="100"/>
+				        <span ng-show="form.apellidoPrimero.$error.required && form.apellidoPrimero.$dirty">El campo es requerido</span>
+				        <span ng-show="form.apellidoPrimero.$error.maxlength">La longitud maxima es de 100 caracteres</span>
+			        </div>
+		        </div>
+
+		        <div class="form-group">
+			        <label for="apellidoSegundo" class="control-label col-sm-2">Segundo Apellido:</label>
+			        <div class="col-sm-10">
+			        	<input id="apellidoSegundo" name="apellidoSegundo" type="text" ng-model="alumno.apellidoSegundo" class="form-control" required maxlength="100"/>
+				        <span ng-show="form.apellidoSegundo.$error.required && form.apellidoSegundo.$dirty">El campo es requerido</span>
+				        <span ng-show="form.apellidoSegundo.$error.maxlength">La longitud maxima es de 100 caracteres</span>
+			        </div>
+		        </div>
+
+		        <div class="form-group">
+			        <label for="tipoIdentificacion" class="control-label col-sm-2">Tipo Identificaci&oacute;n:</label>
+			        <div class="col-sm-10">
+				       	<select id="tipoIdentificacion" name="tipoIdentificacion" type="checkbox" ng-model="alumno.tipoIdentificacion" ng-options="tipoDoc.codigo as tipoDoc.descripcion for tipoDoc in tiposDocumentos" class="control-label col-sm-2" required >
+				       		<option value="">Seleccione</option>
+				       	</select>
+			        	<span ng-show="form.tipoIdentificacion.$error.required && form.tipoIdentificacion.$dirty">El campo es requerido</span>
+		        	</div>
+		       	</div>
+		       	
+		        <div class="form-group">
+			        <label for="fechaNacimiento" class="control-label col-sm-2">Fecha de nacimiento:</label>
+			        <div class="col-sm-10">
+			        	<input id="fechaNacimiento" name="fechaNacimiento" type="text" ng-model="alumno.fechaNacimiento" ca-datepicker="dd/MM/yyyy" class="control-label col-sm-2"/>
+			        </div>
+		        </div>
+		    </fieldset>
+		    
+		    <a href="#/Alumno/listado" class="btn btn-info">Volver</a>
+		    <button ng-click="guardar()" ng-disabled="form.$invalid" class="btn btn-success">Guardar</button>
+		</form>
+
+		<div ng-show="bussinessMessages.length > 0">
+		    <div>Se han producido los siguientes errores</div>
+		    <ul>
+		        <li ng-repeat="bussinessMessage in bussinessMessages">
+		            <strong ng-hide="businessMessage.fieldName == null">{{bussinessMessage.fieldName}}:</strong>
+		            {{bussinessMessage.message}}.
+		        </li>
+		    </ul>
+		    <button ng-click="bussinessMessages = []" >Quitar mensajes</button>
+		</div>
+	</div>
+</div>
