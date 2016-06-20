@@ -2,6 +2,8 @@ package co.com.jrojas.test.springRestAngular.presentacion.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import co.com.jrojas.test.springRestAngular.model.TipoIdentificacion;
+import co.com.jrojas.test.springRestAngular.model.exceptions.BussinessException;
+import co.com.jrojas.test.springRestAngular.model.exceptions.BussinessMessage;
 import co.com.jrojas.test.springRestAngular.persistencia.TiposIdentificacionDAO;
 import co.com.jrojas.test.springRestAngular.presentacion.json.interfaces.InterfaceJsonTransformer;
 
@@ -34,6 +38,17 @@ public class TipoIdentificacionController {
             httpServletResponse.setStatus(HttpServletResponse.SC_OK);
             httpServletResponse.setContentType("application/json; charset=UTF-8");
             httpServletResponse.getWriter().println(jsonSalida);
+        }  catch (BussinessException ex) {
+            List<BussinessMessage> bussinessMessage = ex.getBussinessMessages();
+            String jsonSalida = jsonTransformer.toJson(bussinessMessage);
+            
+            httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            httpServletResponse.setContentType("application/json; charset=UTF-8");
+            try {
+                httpServletResponse.getWriter().println(jsonSalida);
+            } catch (IOException ex1) {
+                Logger.getLogger(TipoIdentificacionController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
         } catch (Exception ex) {
         	// Cuando existen metodos personalizados del negocio
         	// httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -58,6 +73,17 @@ public class TipoIdentificacionController {
             httpServletResponse.setStatus(HttpServletResponse.SC_OK);
             httpServletResponse.setContentType("application/json; charset=UTF-8");
             httpServletResponse.getWriter().println(jsonSalida);
+        }  catch (BussinessException ex) {
+            List<BussinessMessage> bussinessMessage = ex.getBussinessMessages();
+            String jsonSalida = jsonTransformer.toJson(bussinessMessage);
+            
+            httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            httpServletResponse.setContentType("application/json; charset=UTF-8");
+            try {
+                httpServletResponse.getWriter().println(jsonSalida);
+            } catch (IOException ex1) {
+                Logger.getLogger(TipoIdentificacionController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
         } catch (Exception ex) {
 
         	// Cuando existen metodos personalizados del negocio
@@ -77,7 +103,18 @@ public class TipoIdentificacionController {
 			httpServletResponse.setStatus(HttpServletResponse.SC_OK);
 			httpServletResponse.setContentType("application/json; charset=UTF-8");
 			httpServletResponse.getWriter().println(jsonSalida);
-		}  catch (Exception ex) {
+		}  catch (BussinessException ex) {
+            List<BussinessMessage> bussinessMessage = ex.getBussinessMessages();
+            String jsonSalida = jsonTransformer.toJson(bussinessMessage);
+            
+            httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            httpServletResponse.setContentType("application/json; charset=UTF-8");
+            try {
+                httpServletResponse.getWriter().println(jsonSalida);
+            } catch (IOException ex1) {
+                Logger.getLogger(TipoIdentificacionController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }  catch (Exception ex) {
 			httpServletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -92,6 +129,17 @@ public class TipoIdentificacionController {
 	        httpServletResponse.setStatus(HttpServletResponse.SC_OK);
 	        httpServletResponse.setContentType("application/json; charset=UTF-8");
 	        httpServletResponse.getWriter().println(jsonSalida);
+        }  catch (BussinessException ex) {
+            List<BussinessMessage> bussinessMessage = ex.getBussinessMessages();
+            String jsonSalida = jsonTransformer.toJson(bussinessMessage);
+            
+            httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            httpServletResponse.setContentType("application/json; charset=UTF-8");
+            try {
+                httpServletResponse.getWriter().println(jsonSalida);
+            } catch (IOException ex1) {
+                Logger.getLogger(TipoIdentificacionController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
         } catch (Exception ex) {
         	httpServletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         	httpServletResponse.setContentType("text/plain; charset=UTF-8");
@@ -108,7 +156,18 @@ public class TipoIdentificacionController {
 		try {
 			tipoIdentificacionDAO.delete(identificacion);
 			httpServletResponse.setStatus(HttpServletResponse.SC_NO_CONTENT);
-		} catch (Exception ex) {
+		}  catch (BussinessException ex) {
+            List<BussinessMessage> bussinessMessage = ex.getBussinessMessages();
+            String jsonSalida = jsonTransformer.toJson(bussinessMessage);
+            
+            httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            httpServletResponse.setContentType("application/json; charset=UTF-8");
+            try {
+                httpServletResponse.getWriter().println(jsonSalida);
+            } catch (IOException ex1) {
+                Logger.getLogger(TipoIdentificacionController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        } catch (Exception ex) {
 			httpServletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
 	}  

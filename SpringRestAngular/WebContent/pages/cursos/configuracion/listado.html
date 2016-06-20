@@ -1,0 +1,75 @@
+<div ng-show="bussinessMessages.length > 0">
+	<div class="alert alert-danger">
+		<div>Se han producido los siguientes errores:</div>
+		<ul>
+			<li ng-repeat="bussinessMessage in bussinessMessages">
+				<strong ng-hide="businessMessage.fieldName == null">{{bussinessMessage.fieldName}}:</strong> {{bussinessMessage.message}}.
+			</li>
+		</ul>
+<!-- 		<strong>Danger!</strong> Indicates a dangerous or potentially negative action. -->
+	</div>
+	
+	
+<!-- 	<button ng-click="bussinessMessages = []">Quitar mensajes</button> -->
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="form-group">
+			<label class="control-label col-sm-2">Filtrar por Nombre:</label>
+			<div class="col-sm-10">
+				<input ng-model="configCurs.descripcion" class="form-control">
+			</div>
+		</div>
+	</div>
+</div>
+<br>
+
+<a href="#/" class="btn btn-info">Atras</a>
+<a ng-href="#/ConfigCursos/new" class="btn btn-success">Nuevo Registro</a>
+
+<table class="table table-bordered table-striped">
+	<thead>
+		<tr>
+			<th>Codigo</th>
+			<th>Descripci&oacute;n</th>
+			<th>Minutos de clase</th>
+			<th>Nro Max Alumnos</th>
+			<th>Nro Min Alumnos</th>
+			<th>Cantidad Clases</th>
+			<th>Estado</th>
+			<th>Acci&oacute;n</th>
+		</tr>
+	</thead>
+	<tfoot>
+		<tr>
+			<td colspan="7">El Nro de configuraciones es:</td>
+			<td ng-bind="configCursos.length"></td>
+		</tr>
+	</tfoot>
+	<tbody>
+<!-- 	| filteri18n:{apellidoPrimero:filtro.ape1} -->
+<!-- ng-style="{color:($odd?'red':'green')}" -->
+		<tr ng-repeat="configCu in configCursos | filteri18n:{descripcion : configCu.descripcion}">
+			<td><a ng-href="#/ConfigCursos/edit/{{configCu.codigo}}">{{configCu.codigo}}</a></td>
+			<td>{{configCu.descripcion}}</td>
+			<td>{{configCu.minutosDeClase}}</td>
+			<td>{{configCu.nroMaxAlumnos}}</td>
+			<td>{{configCu.nroMinAlumnos}}</td>
+			<td>{{configCu.cantidadClases}}</td>
+			<td>
+				<div ng-switch on="configCu.estado">
+					<div ng-switch-when="true"><img alt="Is true" src="resources/img/true.png"/></div>
+					<div ng-switch-when="false"><img alt="Is False" src="resources/img/false.png"/></div>
+					<div ng-switch-default>N/A</div>
+				</div>
+			</td>
+			<td>
+				<button ng-click="borrar(configCu.codigo)" class="btn btn-danger">Borrar</button>
+				<a ng-href="#/ConfigCursos/edit/{{configCu.codigo}}">
+					<button class="btn btn-success">Editar</button>
+				</a>
+			</td>
+		</tr>
+	</tbody>
+</table>

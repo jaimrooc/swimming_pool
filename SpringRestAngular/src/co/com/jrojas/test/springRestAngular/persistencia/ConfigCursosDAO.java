@@ -7,12 +7,12 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import co.com.jrojas.test.springRestAngular.model.Profesor;
+import co.com.jrojas.test.springRestAngular.model.ConfigCursos;
 import co.com.jrojas.test.springRestAngular.model.exceptions.BussinessException;
 import co.com.jrojas.test.springRestAngular.model.exceptions.BussinessMessage;
-import co.com.jrojas.test.springRestAngular.persistencia.interfaces.ProfesorDAOInterface;
+import co.com.jrojas.test.springRestAngular.persistencia.interfaces.ConfigCursosDAOInterface;
 
-public class ProfesorDAO implements ProfesorDAOInterface {
+public class ConfigCursosDAO implements ConfigCursosDAOInterface {
 	
 	// JDBC driver name and database URL
    static final String JDBC_DRIVER = "org.postgresql.Driver";  
@@ -23,30 +23,32 @@ public class ProfesorDAO implements ProfesorDAOInterface {
    static final String PASS = "Admin123*";
 	
 	@Override
-	public boolean insert(Profesor profesor) throws BussinessException {
+	public boolean insert(ConfigCursos configCursos) throws BussinessException {
 		Connection con = null;
 	    PreparedStatement pst = null;
 		try {
 			Class.forName(JDBC_DRIVER);
 	        con = DriverManager.getConnection(DB_URL,USER,PASS);
 	        String query = ""
-	        		+ " INSERT INTO PROFESORES ("
-	        		+ " 	identificacion,"
-	        		+ " 	tipo_identificacion,"
-	        		+ "		nombre,"
-	        		+ "		apellido_primero,"
-	        		+ " 	apellido_segundo,"
-	        		+ " 	fecha_nacimiento)"
+	        		+ " INSERT INTO CONFIG_CURSOS ("
+	        		+ " 	codigo,"
+	        		+ " 	descripcion,"
+	        		+ "		minutos_de_clase,"
+	        		+ "		nro_max_alumnos,"
+	        		+ " 	nro_min_alumnos,"
+	        		+ " 	cantidad_clases,"
+	        		+ "		estado)"
 	        		+ " VALUES"
-	        		+ " 	(?,?,?,?,?,?)";
+	        		+ " 	(?,?,?,?,?,?,?)";
 			
 	        pst = con.prepareStatement(query);
-	        pst.setLong(1, profesor.getIdentificacion());
-	        pst.setLong(2, profesor.getTipoIdentificacion() == null ? 1 : profesor.getTipoIdentificacion());
-	        pst.setString(3, profesor.getNombre());
-	        pst.setString(4, profesor.getApellidoPrimero());
-	        pst.setString(5, profesor.getApellidoSegundo());
-	        pst.setDate(6,  new java.sql.Date(profesor.getFechaNacimiento().getTime()));
+	        pst.setInt(1, configCursos.getCodigo());
+	        pst.setString(2, configCursos.getDescripcion());
+	        pst.setInt(3, configCursos.getMinutosDeClase());
+	        pst.setInt(4, configCursos.getNroMaxAlumnos());
+	        pst.setInt(5, configCursos.getNroMinAlumnos());
+	        pst.setInt(6, configCursos.getCantidadClases());
+	        pst.setBoolean(7, configCursos.getEstado() == null ? true : configCursos.getEstado());
 	        if (pst.executeUpdate() == 1) {
 	        	return true;
 	        } else {
@@ -73,7 +75,7 @@ public class ProfesorDAO implements ProfesorDAOInterface {
 	}
 
 	@Override
-	public boolean update(Profesor profesor) throws BussinessException {
+	public boolean update(ConfigCursos configCursos) throws BussinessException {
 
 		Connection con = null;
 	    PreparedStatement pst = null;
@@ -81,23 +83,25 @@ public class ProfesorDAO implements ProfesorDAOInterface {
 			Class.forName(JDBC_DRIVER);
 	        con = DriverManager.getConnection(DB_URL,USER,PASS);
 	        String query = ""
-	        		+ " UPDATE PROFESORES SET "
-	        		+ " 	tipo_identificacion = ?, "
-	        		+ "		nombre = ?,"
-	        		+ "		apellido_primero = ?,"
-	        		+ " 	apellido_segundo = ?,"
-	        		+ " 	fecha_nacimiento  = ?"
+	        		+ " UPDATE CONFIG_CURSOS SET "
+	        		+ " 	descripcion = ?,"
+	        		+ "		minutos_de_clase = ?,"
+	        		+ "		nro_max_alumnos = ?,"
+	        		+ " 	nro_min_alumnos = ?,"
+	        		+ " 	cantidad_clases = ?,"
+	        		+ "		estado = ?"
 	        		+ " WHERE "
-	        		+ " 	identificacion = ?";
+	        		+ " 	codigo = ?";
 			
 	        pst = con.prepareStatement(query);
 
-	        pst.setLong(1, profesor.getTipoIdentificacion() == null ? 1 : profesor.getTipoIdentificacion());
-	        pst.setString(2, profesor.getNombre());
-	        pst.setString(3, profesor.getApellidoPrimero());
-	        pst.setString(4, profesor.getApellidoSegundo());
-	        pst.setDate(5,  new java.sql.Date(profesor.getFechaNacimiento().getTime()));
-	        pst.setLong(6, profesor.getIdentificacion());
+	        pst.setString(1, configCursos.getDescripcion());
+	        pst.setInt(2, configCursos.getMinutosDeClase());
+	        pst.setInt(3, configCursos.getNroMaxAlumnos());
+	        pst.setInt(4, configCursos.getNroMinAlumnos());
+	        pst.setInt(5,  configCursos.getCantidadClases());
+	        pst.setBoolean(6, configCursos.getEstado());
+	        pst.setInt(7, configCursos.getCodigo());
 	        
 	        if (pst.executeUpdate() == 1) {
 	        	return true;
@@ -125,7 +129,7 @@ public class ProfesorDAO implements ProfesorDAOInterface {
 	}
 
 	@Override
-	public Profesor get(Long identificacion) throws BussinessException {
+	public ConfigCursos get(int codigo) throws BussinessException {
 		Connection con = null;
 	    PreparedStatement pst = null;
 	    ResultSet rs = null;
@@ -135,30 +139,32 @@ public class ProfesorDAO implements ProfesorDAOInterface {
 	        con = DriverManager.getConnection(DB_URL,USER,PASS);
 	        String query = ""
 	        		+ " SELECT"
-	        		+ " 	identificacion AS id,"
-	        		+ " 	tipo_identificacion AS tip_id,"
-	        		+ "		nombre AS nombre,"
-	        		+ "		apellido_primero AS ape_p,"
-	        		+ " 	apellido_segundo AS ape_s,"
-	        		+ " 	fecha_nacimiento AS fecha_nac"
+	        		+ "		codigo 			 AS cod,"
+	        		+ " 	descripcion 	 AS des,"
+	        		+ " 	minutos_de_clase AS min_clas,"
+	        		+ "		nro_max_alumnos  AS max_alm,"
+	        		+ "		nro_min_alumnos  AS min_alm,"
+	        		+ " 	cantidad_clases  AS can_clas,"
+	        		+ " 	estado 			 AS est"
 	        		+ " FROM"
-	        		+ " 	PROFESORES "
+	        		+ " 	CONFIG_CURSOS "
 	        		+ " WHERE"
-	        		+ " 	identificacion = ?";
+	        		+ " 	codigo = ?";
 
 	        pst = con.prepareStatement(query);
-	        pst.setLong(1, identificacion);
+	        pst.setLong(1, codigo);
 	        rs = pst.executeQuery();
 	        
 	        while (rs.next()) {
-	        	Profesor profesor = new Profesor(
-	        			identificacion, 
-	        			rs.getString("nombre"), 
-	        			rs.getString("ape_p"), 
-	        			rs.getString("ape_s"),
-	        			rs.getDate("fecha_nac"), 
-	        			rs.getLong("tip_id"));
-	        	return profesor;
+				ConfigCursos alumno = new ConfigCursos(
+						rs.getInt("cod"), 
+						rs.getString("des"),
+						rs.getInt("min_clas"), 
+						rs.getInt("max_alm"),
+						rs.getInt("min_alm"), 
+						rs.getInt("can_clas"), 
+						rs.getBoolean("est"));
+	        	return alumno;
             }
 	    } catch (Exception ex) {
 	    	throw new BussinessException(new BussinessMessage(null, ex.toString()));
@@ -182,18 +188,17 @@ public class ProfesorDAO implements ProfesorDAOInterface {
 	}
 
 	@Override
-	public boolean delete(Long identificacion) throws BussinessException {
+	public boolean delete(int codigo) throws BussinessException {
 		Connection con = null;
 	    PreparedStatement pst = null;
 		try {
 			Class.forName(JDBC_DRIVER);
 	        con = DriverManager.getConnection(DB_URL,USER,PASS);
 	        String query = ""
-	        		+ " DELETE FROM PROFESORES WHERE identificacion = ?";
+	        		+ " DELETE FROM CONFIG_CURSOS WHERE codigo = ?";
 			
 	        pst = con.prepareStatement(query);
-
-	        pst.setLong(1, identificacion);
+	        pst.setLong(1, codigo);
 	        
 	        if (pst.executeUpdate() == 1) {
 	        	return true;
@@ -220,7 +225,7 @@ public class ProfesorDAO implements ProfesorDAOInterface {
 	}
 
 	@Override
-	public List<Profesor> findAll() throws BussinessException {
+	public List<ConfigCursos> findAll() throws BussinessException {
 		Connection con = null;
 	    PreparedStatement pst = null;
 	    ResultSet rs = null;
@@ -228,31 +233,33 @@ public class ProfesorDAO implements ProfesorDAOInterface {
 	    try {
 	    	Class.forName(JDBC_DRIVER);
 	        con = DriverManager.getConnection(DB_URL,USER,PASS);
-	        ArrayList<Profesor> listaProfesors = new ArrayList<>();	    	
+	        ArrayList<ConfigCursos> listaAlumnos = new ArrayList<>();
 	        String query = ""
 	        		+ " SELECT"
-	        		+ " 	identificacion AS id,"
-	        		+ " 	tipo_identificacion AS tip_id,"
-	        		+ "		nombre AS nombre,"
-	        		+ "		apellido_primero AS ape_p,"
-	        		+ " 	apellido_segundo AS ape_s,"
-	        		+ " 	fecha_nacimiento AS fecha_nac"
+	        		+ "		codigo 			 AS cod,"
+	        		+ " 	descripcion 	 AS des,"
+	        		+ " 	minutos_de_clase AS min_clas,"
+	        		+ "		nro_max_alumnos  AS max_alm,"
+	        		+ "		nro_min_alumnos  AS min_alm,"
+	        		+ " 	cantidad_clases  AS can_clas,"
+	        		+ " 	estado 			 AS est"
 	        		+ " FROM"
-	        		+ " 	PROFESORES ";
+	        		+ " 	CONFIG_CURSOS ";
 	        
 	        pst = con.prepareStatement(query);
 	        rs = pst.executeQuery();
 	        
 	        while (rs.next()) {
-	        	listaProfesors.add(new Profesor(
-	        			rs.getLong("id"), 
-	        			rs.getString("nombre"), 
-	        			rs.getString("ape_p"), 
-	        			rs.getString("ape_s"),
-	        			rs.getDate("fecha_nac"), 
-	        			rs.getLong("tip_id")));
+	        	listaAlumnos.add(new ConfigCursos(
+						rs.getInt("cod"), 
+						rs.getString("des"),
+						rs.getInt("min_clas"), 
+						rs.getInt("max_alm"),
+						rs.getInt("min_alm"), 
+						rs.getInt("can_clas"), 
+						rs.getBoolean("est")));
             }
-	        return listaProfesors;
+	        return listaAlumnos;
 	    } catch (Exception ex) {
 	    	throw new BussinessException(new BussinessMessage(null, ex.toString()));
 	    } finally {

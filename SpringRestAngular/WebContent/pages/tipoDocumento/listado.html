@@ -1,3 +1,15 @@
+<div ng-show="bussinessMessages.length > 0">
+	<div class="alert alert-danger">
+		<a class="close" ng-click="bussinessMessages = []">X</a>
+		<div><strong>Se han producido los siguientes errores:</strong></div>
+		<ul>
+			<li ng-repeat="bussinessMessage in bussinessMessages">
+				<strong ng-hide="businessMessage.fieldName == null">{{bussinessMessage.fieldName}}:</strong> {{bussinessMessage.message}}.
+			</li>
+		</ul>
+	</div>
+</div>
+
 <div class="row">
 	<div class="col-xs-12">
 		<div class="form-group">
@@ -40,12 +52,12 @@
 	</tbody>
 </table>
 
-<div ng-show="bussinessMessages.length > 0">
-	<div>Se han producido los siguientes errores</div>
-	<ul>
-		<li ng-repeat="bussinessMessage in bussinessMessages"><strong
-			ng-hide="businessMessage.fieldName == null">{{bussinessMessage.fieldName}}:</strong>
-			{{bussinessMessage.message}}.</li>
-	</ul>
-	<button ng-click="bussinessMessages = []">Quitar mensajes</button>
-</div>
+<!-- <div ng-show="bussinessMessages.length > 0"> -->
+<!-- 	<div>Se han producido los siguientes errores</div> -->
+<!-- 	<ul> -->
+<!-- 		<li ng-repeat="bussinessMessage in bussinessMessages"><strong -->
+<!-- 			ng-hide="businessMessage.fieldName == null">{{bussinessMessage.fieldName}}:</strong> -->
+<!-- 			{{bussinessMessage.message}}.</li> -->
+<!-- 	</ul> -->
+<!-- 	<button ng-click="bussinessMessages = []">Quitar mensajes</button> -->
+<!-- </div> -->

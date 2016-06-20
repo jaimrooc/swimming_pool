@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.com.jrojas.test.springRestAngular.model.Alumno;
+import co.com.jrojas.test.springRestAngular.model.exceptions.BussinessException;
+import co.com.jrojas.test.springRestAngular.model.exceptions.BussinessMessage;
 import co.com.jrojas.test.springRestAngular.persistencia.interfaces.AlumnoDAOInterface;
 
 public class AlumnoDAO implements AlumnoDAOInterface {
@@ -21,7 +23,7 @@ public class AlumnoDAO implements AlumnoDAOInterface {
    static final String PASS = "Admin123*";
 	
 	@Override
-	public boolean insert(Alumno alumno) {
+	public boolean insert(Alumno alumno) throws BussinessException {
 		Connection con = null;
 	    PreparedStatement pst = null;
 		try {
@@ -52,7 +54,7 @@ public class AlumnoDAO implements AlumnoDAOInterface {
 	        }
 	        
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new BussinessException(new BussinessMessage(null, e.toString()));
 		} finally {
 			// finally block used to close resources
 			try {
@@ -68,11 +70,10 @@ public class AlumnoDAO implements AlumnoDAOInterface {
 				System.out.println(se);
 			}
 		}
-		return false;
 	}
 
 	@Override
-	public boolean update(Alumno alumno) {
+	public boolean update(Alumno alumno) throws BussinessException {
 
 		Connection con = null;
 	    PreparedStatement pst = null;
@@ -105,7 +106,7 @@ public class AlumnoDAO implements AlumnoDAOInterface {
 	        }
 	        
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new BussinessException(new BussinessMessage(null, e.toString()));
 		} finally {
 			// finally block used to close resources
 			try {
@@ -121,12 +122,10 @@ public class AlumnoDAO implements AlumnoDAOInterface {
 				System.out.println(se);
 			}
 		}
-		return false;
-	
 	}
 
 	@Override
-	public Alumno get(Long identificacion) {
+	public Alumno get(Long identificacion) throws BussinessException {
 		Connection con = null;
 	    PreparedStatement pst = null;
 	    ResultSet rs = null;
@@ -162,8 +161,7 @@ public class AlumnoDAO implements AlumnoDAOInterface {
 	        	return alumno;
             }
 	    } catch (Exception ex) {
-	        System.out.println(ex);
-	        return null;
+	    	throw new BussinessException(new BussinessMessage(null, ex.toString()));
 	    } finally {
 	        try {
 	            if (rs != null) {
@@ -184,7 +182,7 @@ public class AlumnoDAO implements AlumnoDAOInterface {
 	}
 
 	@Override
-	public boolean delete(Long idSeguroMedico) {
+	public boolean delete(Long idSeguroMedico) throws BussinessException {
 		Connection con = null;
 	    PreparedStatement pst = null;
 		try {
@@ -204,7 +202,7 @@ public class AlumnoDAO implements AlumnoDAOInterface {
 	        }
 	        
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new BussinessException(new BussinessMessage(null, e.toString()));
 		} finally {
 			try {
 				if (pst != null)
@@ -219,11 +217,10 @@ public class AlumnoDAO implements AlumnoDAOInterface {
 				System.out.println(se);
 			}
 		}
-		return false;
 	}
 
 	@Override
-	public List<Alumno> findAll() {
+	public List<Alumno> findAll() throws BussinessException {
 		Connection con = null;
 	    PreparedStatement pst = null;
 	    ResultSet rs = null;
@@ -257,8 +254,7 @@ public class AlumnoDAO implements AlumnoDAOInterface {
             }
 	        return listaAlumnos;
 	    } catch (Exception ex) {
-	        System.out.println(ex);
-	        return null;
+	    	throw new BussinessException(new BussinessMessage(null, ex.toString()));
 	    } finally {
 	        try {
 	            if (rs != null) {
@@ -276,5 +272,4 @@ public class AlumnoDAO implements AlumnoDAOInterface {
 	        }
 	    }
 	}
-
 }

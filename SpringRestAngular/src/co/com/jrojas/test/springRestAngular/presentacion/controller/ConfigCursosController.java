@@ -15,26 +15,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import co.com.jrojas.test.springRestAngular.model.Alumno;
+import co.com.jrojas.test.springRestAngular.model.ConfigCursos;
 import co.com.jrojas.test.springRestAngular.model.exceptions.BussinessException;
 import co.com.jrojas.test.springRestAngular.model.exceptions.BussinessMessage;
-import co.com.jrojas.test.springRestAngular.persistencia.AlumnoDAO;
+import co.com.jrojas.test.springRestAngular.persistencia.ConfigCursosDAO;
 import co.com.jrojas.test.springRestAngular.presentacion.json.interfaces.InterfaceJsonTransformer;
 
 @Controller
-public class AlumnoController {
+public class ConfigCursosController {
 	
 	@Autowired
     private InterfaceJsonTransformer jsonTransformer;
 	
 	@Autowired
-	private AlumnoDAO alumnoDAO;
+	private ConfigCursosDAO configCursosDAO;
 	
-	@RequestMapping(value = "/Alumno/{identificacion}", method=RequestMethod.GET, produces = "application/json")
-	public void leer(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, @PathVariable("identificacion") Long identificacion) throws IOException {
+	@RequestMapping(value = "/ConfigCursos/{codigo}", method=RequestMethod.GET, produces = "application/json")
+	public void leer(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, @PathVariable("codigo") Integer codigo) throws IOException {
 		try {
-			Alumno alumno = alumnoDAO.get(identificacion);
-            String jsonSalida=jsonTransformer.toJson(alumno);
+			ConfigCursos configCursos = configCursosDAO.get(codigo);
+            String jsonSalida=jsonTransformer.toJson(configCursos);
             httpServletResponse.setStatus(HttpServletResponse.SC_OK);
             httpServletResponse.setContentType("application/json; charset=UTF-8");
             httpServletResponse.getWriter().println(jsonSalida);
@@ -64,12 +64,12 @@ public class AlumnoController {
         }
 	}
 	
-	@RequestMapping(value = "/Alumno", method=RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	@RequestMapping(value = "/ConfigCursos", method=RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public void insertar(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, @RequestBody String jsonEntrada) {
 		try {
-            Alumno alumno = (Alumno) jsonTransformer.fromJson(jsonEntrada, Alumno.class);
-            alumnoDAO.insert(alumno);
-            String jsonSalida=jsonTransformer.toJson(alumno);
+			ConfigCursos configCursos = (ConfigCursos) jsonTransformer.fromJson(jsonEntrada, ConfigCursos.class);
+            configCursosDAO.insert(configCursos);
+            String jsonSalida=jsonTransformer.toJson(configCursos);
             httpServletResponse.setStatus(HttpServletResponse.SC_OK);
             httpServletResponse.setContentType("application/json; charset=UTF-8");
             httpServletResponse.getWriter().println(jsonSalida);
@@ -94,10 +94,10 @@ public class AlumnoController {
         }
 	}
 	
-	@RequestMapping(value = "/Alumno", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/ConfigCursos", method = RequestMethod.GET, produces = "application/json")
 	public void findAll(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		try {
-			List<Alumno> segurosMedicos = alumnoDAO.findAll();
+			List<ConfigCursos> segurosMedicos = configCursosDAO.findAll();
 			String jsonSalida = jsonTransformer.toJson(segurosMedicos);
 			
 			httpServletResponse.setStatus(HttpServletResponse.SC_OK);
@@ -119,12 +119,12 @@ public class AlumnoController {
 		}
 	}
 	
-	@RequestMapping(value = "/Alumno/{identificacion}", method = RequestMethod.PUT, consumes = "application/json", produces = "application/json")
-	public void update(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, @RequestBody String jsonEntrada, @PathVariable("identificacion") Long identificacion) {
+	@RequestMapping(value = "/ConfigCursos/{codigo}", method = RequestMethod.PUT, consumes = "application/json", produces = "application/json")
+	public void update(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, @RequestBody String jsonEntrada, @PathVariable("codigo") int codigo) {
 		try {
-			Alumno alumno = (Alumno) jsonTransformer.fromJson(jsonEntrada, Alumno.class);
-	        alumnoDAO.update(alumno);
-	        String jsonSalida = jsonTransformer.toJson(alumno);
+			ConfigCursos configCursos = (ConfigCursos) jsonTransformer.fromJson(jsonEntrada, ConfigCursos.class);
+	        configCursosDAO.update(configCursos);
+	        String jsonSalida = jsonTransformer.toJson(configCursos);
 	        
 	        httpServletResponse.setStatus(HttpServletResponse.SC_OK);
 	        httpServletResponse.setContentType("application/json; charset=UTF-8");
@@ -151,10 +151,10 @@ public class AlumnoController {
     	}
 	}
 	
-	@RequestMapping(value = "/Alumno/{identificacion}", method = RequestMethod.DELETE, produces = "application/json")
-	public void delete(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, @PathVariable("identificacion") Long identificacion) {
+	@RequestMapping(value = "/ConfigCursos/{codigo}", method = RequestMethod.DELETE, produces = "application/json")
+	public void delete(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, @PathVariable("codigo") int codigo) {
 		try {
-			alumnoDAO.delete(identificacion);
+			configCursosDAO.delete(codigo);
 			httpServletResponse.setStatus(HttpServletResponse.SC_NO_CONTENT);
 		}  catch (BussinessException ex) {
             List<BussinessMessage> bussinessMessage = ex.getBussinessMessages();

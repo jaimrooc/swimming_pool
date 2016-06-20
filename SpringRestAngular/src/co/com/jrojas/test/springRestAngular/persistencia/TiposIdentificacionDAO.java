@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.com.jrojas.test.springRestAngular.model.TipoIdentificacion;
+import co.com.jrojas.test.springRestAngular.model.exceptions.BussinessException;
+import co.com.jrojas.test.springRestAngular.model.exceptions.BussinessMessage;
 import co.com.jrojas.test.springRestAngular.persistencia.interfaces.TiposIdentificacionDAOInterface;
 
 public class TiposIdentificacionDAO implements TiposIdentificacionDAOInterface {
@@ -21,7 +23,7 @@ public class TiposIdentificacionDAO implements TiposIdentificacionDAOInterface {
    static final String PASS = "Admin123*";
 	
 	@Override
-	public boolean insert(TipoIdentificacion tipoIdentificacion) {
+	public boolean insert(TipoIdentificacion tipoIdentificacion) throws BussinessException {
 		Connection con = null;
 	    PreparedStatement pst = null;
 		try {
@@ -44,7 +46,7 @@ public class TiposIdentificacionDAO implements TiposIdentificacionDAOInterface {
 	        }
 	        
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new BussinessException(new BussinessMessage(null, e.toString()));
 		} finally {
 			// finally block used to close resources
 			try {
@@ -60,11 +62,10 @@ public class TiposIdentificacionDAO implements TiposIdentificacionDAOInterface {
 				System.out.println(se);
 			}
 		}
-		return false;
 	}
 
 	@Override
-	public boolean update(TipoIdentificacion tipoIdentificacion) {
+	public boolean update(TipoIdentificacion tipoIdentificacion) throws BussinessException {
 		Connection con = null;
 	    PreparedStatement pst = null;
 		try {
@@ -88,7 +89,7 @@ public class TiposIdentificacionDAO implements TiposIdentificacionDAOInterface {
 	        }
 	        
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new BussinessException(new BussinessMessage(null, e.toString()));
 		} finally {
 			// finally block used to close resources
 			try {
@@ -104,12 +105,10 @@ public class TiposIdentificacionDAO implements TiposIdentificacionDAOInterface {
 				System.out.println(se);
 			}
 		}
-		return false;
-	
 	}
 
 	@Override
-	public TipoIdentificacion get(int identificacion) {
+	public TipoIdentificacion get(int identificacion) throws BussinessException {
 		Connection con = null;
 	    PreparedStatement pst = null;
 	    ResultSet rs = null;
@@ -136,8 +135,7 @@ public class TiposIdentificacionDAO implements TiposIdentificacionDAOInterface {
 	        	return tipoIdentificacion;
             }
 	    } catch (Exception ex) {
-	        System.out.println(ex);
-	        return null;
+	    	throw new BussinessException(new BussinessMessage(null, ex.toString()));
 	    } finally {
 	        try {
 	            if (rs != null) {
@@ -158,7 +156,7 @@ public class TiposIdentificacionDAO implements TiposIdentificacionDAOInterface {
 	}
 
 	@Override
-	public boolean delete(int idSeguroMedico) {
+	public boolean delete(int idSeguroMedico) throws BussinessException {
 		Connection con = null;
 	    PreparedStatement pst = null;
 		try {
@@ -178,7 +176,7 @@ public class TiposIdentificacionDAO implements TiposIdentificacionDAOInterface {
 	        }
 	        
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new BussinessException(new BussinessMessage(null, e.toString()));
 		} finally {
 			try {
 				if (pst != null)
@@ -193,11 +191,10 @@ public class TiposIdentificacionDAO implements TiposIdentificacionDAOInterface {
 				System.out.println(se);
 			}
 		}
-		return false;
 	}
 
 	@Override
-	public List<TipoIdentificacion> findAll() {
+	public List<TipoIdentificacion> findAll() throws BussinessException {
 		Connection con = null;
 	    PreparedStatement pst = null;
 	    ResultSet rs = null;
@@ -223,8 +220,7 @@ public class TiposIdentificacionDAO implements TiposIdentificacionDAOInterface {
             }
 	        return listaTipoIdentificacion;
 	    } catch (Exception ex) {
-	        System.out.println(ex);
-	        return null;
+	    	throw new BussinessException(new BussinessMessage(null, ex.toString()));
 	    } finally {
 	        try {
 	            if (rs != null) {

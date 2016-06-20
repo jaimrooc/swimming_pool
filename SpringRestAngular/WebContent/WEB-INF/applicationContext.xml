@@ -13,4 +13,5 @@
 	<bean class="co.com.jrojas.test.springRestAngular.persistencia.AlumnoDAO" />
 	<bean class="co.com.jrojas.test.springRestAngular.persistencia.TiposIdentificacionDAO" />
 	<bean class="co.com.jrojas.test.springRestAngular.persistencia.ProfesorDAO" />
+	<bean class="co.com.jrojas.test.springRestAngular.persistencia.ConfigCursosDAO" />
 </beans>

@@ -1,7 +1,7 @@
 //####################################################################################################//
 //######################################### MODULE ###################################################//
 //####################################################################################################//
-var app = angular.module("app", ['ngRoute']);
+var app = angular.module("app", ['ngRoute', 'ui.bootstrap.demo']);
 
 //####################################################################################################//
 //######################################### CONSTANTES ###############################################//
@@ -12,6 +12,7 @@ app.constant("baseUrl", ".");
 //######################################### VALUE ####################################################//
 //####################################################################################################//
 app.value("urlLogo", "resources/img/swimming_pool.png");
+app.value("urlTitle", "Swimming Pool");
 
 //####################################################################################################//
 //######################################### SERVICIOS ################################################//
@@ -331,6 +332,320 @@ function RemoteResource($http, $q, baseUrl) {
 
         return promise;
     };
+    
+    // --------------------------------------------- Configuracion de cursos --------------------------------------------- //
+	// Metodo 'GET' encargado de obtener un objeto teniendo como referencia un codigo
+	this.getConfigCurs = function(codigo) {
+		var defered = $q.defer();
+		var promise = defered.promise;
+		
+		$http({
+			method: 'GET',
+			url: baseUrl + '/api/ConfigCursos/' + codigo
+        }).success(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado fue exitosos
+            defered.resolve(data);
+        }).error(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado NO fue exitosos
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+        return promise;
+    };
+    
+    // Metodo 'LIST' encargado de obtener una lista de objectos
+    this.listConfigCurs = function() {
+        var defered = $q.defer();
+        var promise = defered.promise;
+
+        $http({
+            method: 'GET',
+            url: baseUrl + '/api/ConfigCursos'
+        }).success(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado fue exitosos
+            defered.resolve(data);
+        }).error(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado NO fue exitosos
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+        return promise;
+    };
+
+    // Metodo 'INSERT' encargado de almacenar objectos
+    this.insertConfigCurs = function(configCurs) {
+        var defered = $q.defer();
+        var promise = defered.promise;
+
+        $http({
+            method: 'POST',
+            url: baseUrl + '/api/ConfigCursos',
+            data: configCurs
+        }).success(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado fue exitosos
+            defered.resolve(data);
+        }).error(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado NO fue exitosos
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+        return promise;
+    };
+    
+    // Metodo 'UPDATE' encargado de modificar un objecto
+    this.updateConfigCurs = function(codigo, configCurs) {
+        var defered = $q.defer();
+        var promise = defered.promise;
+
+        $http({
+            method: 'PUT',
+            url: baseUrl + '/api/ConfigCursos/' + codigo,
+            data: configCurs
+        }).success(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado fue exitosos
+            defered.resolve(data);
+        }).error(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado NO fue exitosos
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+
+        return promise;
+    };
+
+    // Metodo 'DELETE' encargado de eliminar un objecto
+    this.removeConfigCurs = function(codigo) {
+        var defered = $q.defer();
+        var promise = defered.promise;
+
+        $http({
+            method: 'DELETE',
+            url: baseUrl + '/api/ConfigCursos/' + codigo
+        }).success(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado fue exitosos
+            defered.resolve(data);
+        }).error(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado NO fue exitosos
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+
+        return promise;
+    };
+ // --------------------------------------------- Cursos --------------------------------------------- //
+	// Metodo 'GET' encargado de obtener un objeto teniendo como referencia un codigo
+	this.getCurso = function(codigo) {
+		var defered = $q.defer();
+		var promise = defered.promise;
+		
+		$http({
+			method: 'GET',
+			url: baseUrl + '/api/Curso/' + codigo
+        }).success(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado fue exitosos
+            defered.resolve(data);
+        }).error(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado NO fue exitosos
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+        return promise;
+    };
+    
+    // Metodo 'LIST' encargado de obtener una lista de objectos
+    this.listCurso = function() {
+        var defered = $q.defer();
+        var promise = defered.promise;
+
+        $http({
+            method: 'GET',
+            url: baseUrl + '/api/Curso'
+        }).success(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado fue exitosos
+            defered.resolve(data);
+        }).error(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado NO fue exitosos
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+        return promise;
+    };
+
+    // Metodo 'INSERT' encargado de almacenar objectos
+    this.insertCurso = function(curso) {
+        var defered = $q.defer();
+        var promise = defered.promise;
+
+        $http({
+            method: 'POST',
+            url: baseUrl + '/api/Curso',
+            data: curso
+        }).success(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado fue exitosos
+            defered.resolve(data);
+        }).error(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado NO fue exitosos
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+        return promise;
+    };
+    
+    // Metodo 'UPDATE' encargado de modificar un objecto
+    this.updateCurso = function(codigo, curso) {
+        var defered = $q.defer();
+        var promise = defered.promise;
+
+        $http({
+            method: 'PUT',
+            url: baseUrl + '/api/Curso/' + codigo,
+            data: curso
+        }).success(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado fue exitosos
+            defered.resolve(data);
+        }).error(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado NO fue exitosos
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+
+        return promise;
+    };
+
+    // Metodo 'DELETE' encargado de eliminar un objecto
+    this.removeCurso = function(codigo) {
+        var defered = $q.defer();
+        var promise = defered.promise;
+
+        $http({
+            method: 'DELETE',
+            url: baseUrl + '/api/Curso/' + codigo
+        }).success(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado fue exitosos
+            defered.resolve(data);
+        }).error(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado NO fue exitosos
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+
+        return promise;
+    };
+	
+	// --------------------------------------------- Clases --------------------------------------------- //
+	// Metodo 'GET' encargado de obtener un objeto teniendo como referencia un codigo
+	this.getClase = function(codigo) {
+		var defered = $q.defer();
+		var promise = defered.promise;
+		
+		$http({
+			method: 'GET',
+			url: baseUrl + '/api/Clase/' + codigo
+        }).success(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado fue exitosos
+            defered.resolve(data);
+        }).error(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado NO fue exitosos
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+        return promise;
+    };
+    
+    // Metodo 'LIST' encargado de obtener una lista de objectos
+    this.listClase = function() {
+        var defered = $q.defer();
+        var promise = defered.promise;
+
+        $http({
+            method: 'GET',
+            url: baseUrl + '/api/Clase'
+        }).success(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado fue exitosos
+            defered.resolve(data);
+        }).error(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado NO fue exitosos
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+        return promise;
+    };
+
+    // Metodo 'INSERT' encargado de almacenar objectos
+    this.insertClase = function(clase) {
+        var defered = $q.defer();
+        var promise = defered.promise;
+
+        $http({
+            method: 'POST',
+            url: baseUrl + '/api/Clase',
+            data: clase
+        }).success(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado fue exitosos
+            defered.resolve(data);
+        }).error(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado NO fue exitosos
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+        return promise;
+    };
+    
+    // Metodo 'UPDATE' encargado de modificar un objecto
+    this.updateClase = function(codigo, clase) {
+        var defered = $q.defer();
+        var promise = defered.promise;
+
+        $http({
+            method: 'PUT',
+            url: baseUrl + '/api/Clase/' + codigo,
+            data: clase
+        }).success(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado fue exitosos
+            defered.resolve(data);
+        }).error(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado NO fue exitosos
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+
+        return promise;
+    };
+
+    // Metodo 'DELETE' encargado de eliminar un objecto
+    this.removeClase = function(codigo) {
+        var defered = $q.defer();
+        var promise = defered.promise;
+
+        $http({
+            method: 'DELETE',
+            url: baseUrl + '/api/Clase/' + codigo
+        }).success(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado fue exitosos
+            defered.resolve(data);
+        }).error(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado NO fue exitosos
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+
+        return promise;
+    };
 }
 
 function RemoteResourceProvider() {
@@ -366,6 +681,84 @@ app.config(['$routeProvider', function($routeProvider) {
     
     $routeProvider.otherwise({
         redirectTo: '/'
+    });
+    
+    // --------------------------------------------- CONFIGURACION CLASE --------------------------------------------- //
+    $routeProvider.when('/ConfigCursos/listado', {
+        templateUrl: "pages/cursos/configuracion/listado.html",
+        controller: "ListadoConfigCursosController",
+        resolve: {
+        	configCursos: ['remoteResource', function(remoteResource) {
+        		return remoteResource.listConfigCurs();
+    		}]
+        }
+    });
+
+    $routeProvider.when('/ConfigCursos/edit/:codigo', {
+        templateUrl: "pages/cursos/configuracion/detalle.html",
+        controller: "EditConfigCursosController",
+        resolve: {
+        	configCurs : ['remoteResource', '$route', function(remoteResource, $route) {
+        		return remoteResource.getConfigCurs($route.current.params.codigo);
+        	}]
+        }
+    });
+
+    $routeProvider.when('/ConfigCursos/new', {
+        templateUrl: "pages/cursos/configuracion/detalle.html",
+        controller: "NewConfigCursosController"
+    });
+    
+ // --------------------------------------------- CURSO --------------------------------------------- //
+    $routeProvider.when('/Curso/listado', {
+        templateUrl: "pages/cursos/curso/listado.html",
+        controller: "ListadoCursosController",
+        resolve: {
+        	cursos: ['remoteResource', function(remoteResource) {
+        		return remoteResource.listCurso();
+    		}]
+        }
+    });
+
+    $routeProvider.when('/Curso/edit/:codigo', {
+        templateUrl: "pages/cursos/curso/detalle.html",
+        controller: "EditCursosController",
+        resolve: {
+        	curso : ['remoteResource', '$route', function(remoteResource, $route) {
+        		return remoteResource.getCurso($route.current.params.codigo);
+        	}]
+        }
+    });
+
+    $routeProvider.when('/Curso/new', {
+        templateUrl: "pages/cursos/curso/detalle.html",
+        controller: "NewCursosController"
+    });
+    
+	// --------------------------------------------- CLASE --------------------------------------------- //
+    $routeProvider.when('/Clase/listado', {
+        templateUrl: "pages/cursos/clase/listado.html",
+        controller: "ListadoClaseController",
+        resolve: {
+        	clases: ['remoteResource', function(remoteResource) {
+        		return remoteResource.listClase();
+    		}]
+        }
+    });
+
+    $routeProvider.when('/Clase/edit/:codigo', {
+        templateUrl: "pages/cursos/clase/detalle.html",
+        controller: "EditClaseController",
+        resolve: {
+        	clase : ['remoteResource', '$route', function(remoteResource, $route) {
+        		return remoteResource.getClase($route.current.params.codigo);
+        	}]
+        }
+    });
+
+    $routeProvider.when('/Clase/new', {
+        templateUrl: "pages/cursos/clase/detalle.html",
+        controller: "NewClaseController"
     });
     
     // --------------------------------------------- Alumnos --------------------------------------------- //
@@ -431,19 +824,6 @@ app.config(['$routeProvider', function($routeProvider) {
     });
     
     // --------------------------------------------- Profesores --------------------------------------------- //
-//    $routeProvider.when('/Profesor/listado', {
-//        templateUrl: "pages/profesor/profesores.html",
-//        controller: "CRUDProfesorController",
-//        resolve: {
-//        	alumnos: ['remoteResource', function(remoteResource) {
-//        		return remoteResource.listProf();
-//    		}],
-//            tiposDocumentos: ['remoteResource', function(remoteResource) {
-//            	return remoteResource.listTD();
-//            }]
-//        }
-//    });
-    
     $routeProvider.when('/Profesor/listado', {
         templateUrl: "pages/profesor/profesores.html",
         controller: "ListadoProfesorController",
@@ -472,13 +852,132 @@ app.config(['$routeProvider', function($routeProvider) {
     		}]
         }
     });
+    
+    //--------------------------------------------- Cursos -------------------------------------------------------- //
+	// ***** NUEVO ***** //
+	app.controller("NewCursosController", ['$scope', 'remoteResource', '$location', function($scope, remoteResource, $location) {
+		$scope.curso = {
+			codigo: undefined,
+			nombre: "",
+			anhio: undefined,
+			numeroCurso: undefined,
+			fechaInicio: undefined,
+			fechaFin: undefined,
+			configCursos: undefined,
+			clases: undefined,
+			estado: undefined
+	    };
+		
+		$scope.guardar = function() {
+			if ($scope.form.$valid) {
+				remoteResource.insertCurso($scope.curso).then(function() {
+					$location.path("/Curso/listado");
+				}, function(bussinessMessages) {
+					$scope.bussinessMessages = bussinessMessages;
+				});
+			} else {
+				alert("Hay datos inválidos");
+			}
+		};
+	}]);
+	// ***** EDIT ***** //
+	app.controller("EditCursosController", ['$scope', 'curso', 'remoteResource', '$location', function($scope, curso, remoteResource, $location) {
+		$scope.curso = curso;
+	
+	    $scope.guardar = function() {
+	        if ($scope.form.$valid) {
+	            remoteResource.updateCurso($scope.curso.codigo, $scope.curso).then(function() {
+	                $location.path("/Curso/listado");
+	            }, function(bussinessMessages) {
+	                $scope.bussinessMessages = bussinessMessages;
+	            });
+	        } else {
+	            alert("Hay datos inválidos");
+	        }
+	    };
+	}]);
+	// ***** LIST ***** //
+	app.controller("ListadoCursosController", ['$scope', 'cursos', 'remoteResource', function($scope, cursos, remoteResource) {
+		$scope.cursos = cursos;
+		
+		$scope.borrar = function(codigo) {
+			remoteResource.removeCurso(codigo).then(function() {
+				remoteResource.listCurso().then(function(curso) {
+					$scope.curso = curso;
+	            }, function(bussinessMessages) {
+	            	$scope.bussinessMessages = bussinessMessages;
+	            });
+	        }, function(bussinessMessages) {
+	            $scope.bussinessMessages = bussinessMessages;
+	        });
+	    };
+	}]);
+	//--------------------------------------------- Clases -------------------------------------------------------- //
+	// ***** NUEVO ***** //
+	app.controller("NewClaseController", ['$scope', 'remoteResource', '$location', function($scope, remoteResource, $location) {
+		$scope.clase = {
+			codigo: undefined,
+			dia: undefined,
+			horaIni: undefined,
+			horaFin: undefined,
+			curso: undefined,
+			profesor: undefined,
+			profesorAux: undefined,
+			estado: undefined
+	    };
+		
+		$scope.guardar = function() {
+			if ($scope.form.$valid) {
+				remoteResource.insertClase($scope.clase).then(function() {
+					$location.path("/Clase/listado");
+				}, function(bussinessMessages) {
+					$scope.bussinessMessages = bussinessMessages;
+				});
+			} else {
+				alert("Hay datos inválidos");
+			}
+		};
+	}]);
+	// ***** EDIT ***** //
+	app.controller("EditClaseController", ['$scope', 'clase', 'remoteResource', '$location', function($scope, clase, remoteResource, $location) {
+		$scope.clase = clase;
+	
+	    $scope.guardar = function() {
+	        if ($scope.form.$valid) {
+	            remoteResource.updateClase($scope.clase.codigo, $scope.clase).then(function() {
+	                $location.path("/Clase/listado");
+	            }, function(bussinessMessages) {
+	                $scope.bussinessMessages = bussinessMessages;
+	            });
+	        } else {
+	            alert("Hay datos inválidos");
+	        }
+	    };
+	}]);
+	// ***** LIST ***** //
+	app.controller("ListadoClaseController", ['$scope', 'clases', 'remoteResource', function($scope, clases, remoteResource) {
+		$scope.clases = clases;
+		
+		$scope.borrar = function(codigo) {
+			remoteResource.removeClase(codigo).then(function() {
+				remoteResource.listClase().then(function(clases) {
+					$scope.clases = clases;
+	            }, function(bussinessMessages) {
+	            	$scope.bussinessMessages = bussinessMessages;
+	            });
+	        }, function(bussinessMessages) {
+	            $scope.bussinessMessages = bussinessMessages;
+	        });
+	    };
+	}]);
 }]);
 
 //####################################################################################################//
 //######################################### RUN ######################################################//
 //####################################################################################################//
-app.run(["$rootScope", "urlLogo", function($rootScope, urlLogo) {
+app.run(["$rootScope", "urlLogo", "urlTitle", function($rootScope, urlLogo, urlTitle) {
     $rootScope.urlLogo = urlLogo;
+    $rootScope.urlTitle = urlTitle;
 }]);
 
 //####################################################################################################//
@@ -539,7 +1038,7 @@ app.directive('caDatepicker', [function(dateFormat) {
 //######################################### CONTROLLER ###############################################//
 //####################################################################################################//
 //--------------------------------------------- Alumno -------------------------------------------------------- //
-// ***** NUEVO ***** //
+//***** NUEVO ***** //
 app.controller("NewAlumnoController", ['$scope', 'remoteResource', 'tiposDocumentos','$location', function($scope, remoteResource, tiposDocumentos, $location) {
 	$scope.tiposDocumentos = tiposDocumentos;
 		
@@ -550,7 +1049,7 @@ app.controller("NewAlumnoController", ['$scope', 'remoteResource', 'tiposDocumen
 		apellidoSegundo: undefined,
 		fechaNacimiento: "",
 		tipoIdentificacion: ""
-    };
+ };
 	
 	$scope.guardar = function() {
 		if ($scope.form.$valid) {
@@ -564,15 +1063,72 @@ app.controller("NewAlumnoController", ['$scope', 'remoteResource', 'tiposDocumen
 		}
 	};
 }]);
-// ***** EDIT ***** //
+//***** EDIT ***** //
 app.controller("EditAlumnoController", ['$scope', 'alumno', 'tiposDocumentos', 'remoteResource', '$location', function($scope, alumno, tiposDocumentos, remoteResource, $location) {
 	$scope.tiposDocumentos = tiposDocumentos;
 	$scope.alumno = alumno;
 
+ $scope.guardar = function() {
+     if ($scope.form.$valid) {
+         remoteResource.update($scope.alumno.identificacion, $scope.alumno).then(function() {
+             $location.path("/Alumno/listado");
+         }, function(bussinessMessages) {
+             $scope.bussinessMessages = bussinessMessages;
+         });
+     } else {
+         alert("Hay datos inválidos");
+     }
+ };
+}]);
+//***** LIST ***** //
+app.controller("ListadoAlumnoController", ['$scope', 'alumnos', 'remoteResource', function($scope, alumnos, remoteResource) {
+	$scope.alumnos = alumnos;
+	
+	$scope.borrar = function(identificacion) {
+		remoteResource.remove(identificacion).then(function() {
+			remoteResource.list().then(function(alumnos) {
+				$scope.alumnos = alumnos;
+         }, function(bussinessMessages) {
+         	$scope.bussinessMessages = bussinessMessages;
+         });
+     }, function(bussinessMessages) {
+         $scope.bussinessMessages = bussinessMessages;
+     });
+ };
+}]);
+//--------------------------------------------- Config Cursos -------------------------------------------------------- //
+// ***** NUEVO ***** //
+app.controller("NewConfigCursosController", ['$scope', 'remoteResource', '$location', function($scope, remoteResource, $location) {
+	$scope.configCurs = {
+		codigo: undefined,
+		descripcion: "",
+		minutosDeClase: undefined,
+		nroMaxAlumnos: undefined,
+		nroMinAlumnos: undefined,
+		cantidadClases: undefined,
+		estado: undefined
+    };
+	
+	$scope.guardar = function() {
+		if ($scope.form.$valid) {
+			remoteResource.insertConfigCurs($scope.configCurs).then(function() {
+				$location.path("/ConfigCursos/listado");
+			}, function(bussinessMessages) {
+				$scope.bussinessMessages = bussinessMessages;
+			});
+		} else {
+			alert("Hay datos inválidos");
+		}
+	};
+}]);
+// ***** EDIT ***** //
+app.controller("EditConfigCursosController", ['$scope', 'configCurs', 'remoteResource', '$location', function($scope, configCurs, remoteResource, $location) {
+	$scope.configCurs = configCurs;
+
     $scope.guardar = function() {
         if ($scope.form.$valid) {
-            remoteResource.update($scope.alumno.identificacion, $scope.alumno).then(function() {
-                $location.path("/Alumno/listado");
+            remoteResource.updateConfigCurs($scope.configCurs.codigo, $scope.configCurs).then(function() {
+                $location.path("/ConfigCursos/listado");
             }, function(bussinessMessages) {
                 $scope.bussinessMessages = bussinessMessages;
             });
@@ -582,13 +1138,13 @@ app.controller("EditAlumnoController", ['$scope', 'alumno', 'tiposDocumentos', '
     };
 }]);
 // ***** LIST ***** //
-app.controller("ListadoAlumnoController", ['$scope', 'alumnos', 'remoteResource', function($scope, alumnos, remoteResource) {
-	$scope.alumnos = alumnos;
+app.controller("ListadoConfigCursosController", ['$scope', 'configCursos', 'remoteResource', function($scope, configCursos, remoteResource) {
+	$scope.configCursos = configCursos;
 	
-	$scope.borrar = function(identificacion) {
-		remoteResource.remove(identificacion).then(function() {
-			remoteResource.list().then(function(alumnos) {
-				$scope.alumnos = alumnos;
+	$scope.borrar = function(codigo) {
+		remoteResource.removeConfigCurs(codigo).then(function() {
+			remoteResource.listConfigCurs().then(function(configCursos) {
+				$scope.configCursos = configCursos;
             }, function(bussinessMessages) {
             	$scope.bussinessMessages = bussinessMessages;
             });
@@ -758,58 +1314,5 @@ app.controller("ListadoTiposDocumentoController", ['$scope', 'tiposDocumentos', 
     };
 
 }]);
-////--------------------------------------------- Profesores --------------------------------------------- //
-////***** NUEVO ***** //
-//app.controller("NewTiposDocumentosController", ['$scope', 'remoteResource', '$location', function($scope, remoteResource, $location) {
-//	$scope.tiposDocumento = {
-//		codigo: undefined,
-//		descripcion: ""
-//	};
-//	
-//	$scope.guardar = function() {
-//		if ($scope.form.$valid) {
-//			remoteResource.insertTD($scope.tiposDocumento).then(function() {
-//				$location.path("/TiposDocumento/listado");
-//			}, function(bussinessMessages) {
-//				$scope.bussinessMessages = bussinessMessages;
-//			});
-//		} else {
-//			alert("Hay datos inválidos");
-//		}
-//	};
-//}]);
-////***** EDIT ***** //
-//app.controller("EditTiposDocumentosController", ['$scope', 'tiposDocumento', 'remoteResource', '$location', function($scope, tiposDocumento, remoteResource, $location) {
-// $scope.tiposDocumento = tiposDocumento;
-// 
-// $scope.guardar = function() {
-//     if ($scope.form.$valid) {
-//         remoteResource.updateTD($scope.tiposDocumento.codigo, $scope.tiposDocumento).then(function() {
-//             $location.path("/TiposDocumento/listado");
-//         }, function(bussinessMessages) {
-//             $scope.bussinessMessages = bussinessMessages;
-//         });
-//     } else {
-//         alert("Hay datos inválidos");
-//     }
-// };
-//
-//}]);
-////***** LIST ***** //
-//app.controller("ListadoTiposDocumentoController", ['$scope', 'tiposDocumentos', 'remoteResource', function($scope, tiposDocumentos, remoteResource) {
-//	$scope.tiposDocumentos = tiposDocumentos;
-//	
-//	$scope.borrar = function(codigo) {
-//		remoteResource.deleteTD(codigo).then(function() {
-//			remoteResource.listTD().then(function(tiposDocumentos) {
-//				$scope.tiposDocumentos = tiposDocumentos;
-//         }, function(bussinessMessages) {
-//         	$scope.bussinessMessages = bussinessMessages;
-//         });
-//     }, function(bussinessMessages) {
-//         $scope.bussinessMessages = bussinessMessages;
-//     });
-// };
-//}]);
 //--------------------------------------------- Generales --------------------------------------------- //
 app.controller("MainController", ['$scope', function($scope) {}]);
