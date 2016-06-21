@@ -1,0 +1,84 @@
+<div ng-show="bussinessMessages.length > 0">
+	<div class="alert alert-danger">
+		<div>Se han producido los siguientes errores:</div>
+		<ul>
+			<li ng-repeat="bussinessMessage in bussinessMessages">
+				<strong ng-hide="businessMessage.fieldName == null">{{bussinessMessage.fieldName}}:</strong> {{bussinessMessage.message}}.
+			</li>
+		</ul>
+<!-- 		<strong>Danger!</strong> Indicates a dangerous or potentially negative action. -->
+	</div>
+	
+	
+<!-- 	<button ng-click="bussinessMessages = []">Quitar mensajes</button> -->
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<div class="form-group">
+			<label class="control-label col-sm-2">Filtrar por Nombre:</label>
+			<div class="col-sm-10">
+				<input ng-model="curso.descripcion" class="form-control">
+			</div>
+		</div>
+	</div>
+</div>
+<br>
+
+<a href="#/" class="btn btn-info">Atras</a>
+<a ng-href="#/Curso/new" class="btn btn-success">Nuevo Registro</a>
+
+<table class="table table-bordered table-striped">
+	<thead>
+		<tr>
+			<th>Codigo</th>
+			<th>Nombre</th>
+			<th>Anhio</th>
+			<th>NumeroCurso</th>
+			<th>Fecha Inicio</th>
+			<th>Fecha Final</th>
+			<th>Configuraci&oacute;n Cursos</th>
+			<th>Estado</th>
+			<th>Acci&oacute;n</th>
+		</tr>
+	</thead>
+	<tfoot>
+		<tr>
+			<td colspan="7">El Nro de cursos es:</td>
+			<td ng-bind="cursos.length"></td>
+		</tr>
+	</tfoot>
+	<tbody>
+<!-- 	| filteri18n:{apellidoPrimero:filtro.ape1} -->
+<!-- ng-style="{color:($odd?'red':'green')}" -->
+		<tr ng-repeat="curso in cursos | filteri18n:{nombre : curso.nombre}">
+			<td><a ng-href="#/Curso/edit/{{curso.codigo}}">{{curso.codigo}}</a></td>
+			<td>{{curso.nombre}}</td>
+			<td>{{curso.anhio}}</td>
+			<td>{{curso.numeroCurso}}</td>
+			<td>{{curso.fechaInicio}}</td>
+			<td>{{curso.fechaFin}}</td>
+			<td>
+				<table>
+					<tr><td><strong>Descripcion:</strong>{{curso.configCursos.descripcion}}</td></tr>
+					<tr><td><strong>Minutos De Clase:</strong>{{curso.configCursos.minutosDeClase}}</td></tr>
+					<tr><td><strong>Nro Max Alumnos:</strong>{{curso.configCursos.nroMaxAlumnos}}</td></tr>
+					<tr><td><strong>Nro Min Alumnos:</strong>{{curso.configCursos.nroMinAlumnos}}</td></tr>
+					<tr><td><strong>Cantidad Clases:</strong>{{curso.configCursos.cantidadClases}}</td></tr>
+				</table>
+			</td>
+			<td>
+				<div ng-switch on="curso.estado">
+					<div ng-switch-when="true"><img alt="Is true" src="resources/img/true.png"/></div>
+					<div ng-switch-when="false"><img alt="Is False" src="resources/img/false.png"/></div>
+					<div ng-switch-default>N/A</div>
+				</div>
+			</td>
+			<td>
+				<button ng-click="borrar(curso.codigo)" class="btn btn-danger">Borrar</button>
+				<a ng-href="#/Curso/edit/{{curso.codigo}}">
+					<button class="btn btn-success">Editar</button>
+				</a>
+			</td>
+		</tr>
+	</tbody>
+</table>

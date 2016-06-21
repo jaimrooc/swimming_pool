@@ -2,16 +2,22 @@ package co.com.jrojas.test.springRestAngular.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import co.com.jrojas.test.springRestAngular.model.util.DiasSemana;
+
 public class Clase {
 	
 	private Integer codigo;
-	private String dia;
+	@JsonFormat(pattern = "HH:mm")
 	private Date horaIni;
+	@JsonFormat(pattern = "HH:mm")
 	private Date horaFin;
 	private Boolean estado;
 	private Integer curso;
 	private Long profesor;
 	private Long profesorAux;
+	private DiasSemana diasSemana;
 
 	public Clase() {
 	}
@@ -20,7 +26,10 @@ public class Clase {
 			Long profesorAux) {
 		super();
 		this.codigo = codigo;
-		this.dia = dia;
+		if (this.diasSemana == null) {
+			this.diasSemana = new DiasSemana();
+		}
+		this.diasSemana.setDBToEntity(dia);
 		this.horaIni = horaIni;
 		this.horaFin = horaFin;
 		this.estado = estado;
@@ -41,14 +50,6 @@ public class Clase {
 
 	public void setCodigo(Integer codigo) {
 		this.codigo = codigo;
-	}
-
-	public String getDia() {
-		return dia;
-	}
-
-	public void setDia(String dia) {
-		this.dia = dia;
 	}
 
 	public Date getHoraIni() {
@@ -97,5 +98,13 @@ public class Clase {
 
 	public void setProfesorAux(Long profesorAux) {
 		this.profesorAux = profesorAux;
+	}
+
+	public DiasSemana getDiasSemana() {
+		return diasSemana;
+	}
+
+	public void setDiasSemana(DiasSemana diasSemana) {
+		this.diasSemana = diasSemana;
 	}
 }

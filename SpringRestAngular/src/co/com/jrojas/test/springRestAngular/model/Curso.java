@@ -2,16 +2,20 @@ package co.com.jrojas.test.springRestAngular.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class Curso {
 
 	private Integer codigo;
 	private String nombre;
 	private Integer anhio;
 	private Integer numeroCurso;
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	private Date fechaInicio;
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	private Date fechaFin;
 	private Boolean estado;
-	private Integer configCursos;
+	private ConfigCursos configCursos;
 
 	public Curso() {
 	}
@@ -21,7 +25,7 @@ public class Curso {
 	}
 
 	public Curso(Integer codigo, String nombre, Integer anhio, Integer numeroCurso, Date fechaInicio, Date fechaFin,
-			Boolean estado, Integer configCursos) {
+			Boolean estado, ConfigCursos configCursos) {
 		super();
 		this.codigo = codigo;
 		this.nombre = nombre;
@@ -89,11 +93,11 @@ public class Curso {
 		this.estado = estado;
 	}
 
-	public Integer getConfigCursos() {
+	public ConfigCursos getConfigCursos() {
 		return configCursos;
 	}
 
-	public void setConfigCursos(Integer configCursos) {
+	public void setConfigCursos(ConfigCursos configCursos) {
 		this.configCursos = configCursos;
 	}
 }

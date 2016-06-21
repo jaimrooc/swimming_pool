@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.com.jrojas.test.springRestAngular.model.ConfigCursos;
 import co.com.jrojas.test.springRestAngular.model.Curso;
 import co.com.jrojas.test.springRestAngular.model.exceptions.BussinessException;
 import co.com.jrojas.test.springRestAngular.model.exceptions.BussinessMessage;
@@ -49,7 +50,7 @@ public class CursoDAO implements CursoDAOInterface {
 	        pst.setLong(4, curso.getNumeroCurso());
 	        pst.setDate(5,  new java.sql.Date(curso.getFechaInicio().getTime()));
 	        pst.setDate(6,  new java.sql.Date(curso.getFechaFin().getTime()));
-	        pst.setInt(7,  curso.getConfigCursos());
+	        pst.setInt(7,  curso.getConfigCursos().getCodigo());
 	        pst.setBoolean(8, curso.getEstado() == null ? true : curso.getEstado());
 	        if (pst.executeUpdate() == 1) {
 	        	return true;
@@ -104,7 +105,7 @@ public class CursoDAO implements CursoDAOInterface {
 	        pst.setLong(3, curso.getNumeroCurso());
 	        pst.setDate(4, new java.sql.Date(curso.getFechaInicio().getTime()));
 	        pst.setDate(5, new java.sql.Date(curso.getFechaFin().getTime()));
-	        pst.setInt(6, curso.getConfigCursos());
+	        pst.setInt(6, curso.getConfigCursos().getCodigo());
 	        pst.setBoolean(7, curso.getEstado() == null ? true : curso.getEstado());
 	        pst.setInt(8, curso.getCodigo());
 	        
@@ -144,18 +145,27 @@ public class CursoDAO implements CursoDAOInterface {
 	        con = DriverManager.getConnection(DB_URL,USER,PASS);
 	        String query = ""
 	        		+ " SELECT"
-	        		+ " 	codigo			 AS cod,"
-	        		+ " 	nombre			 AS nom,"
-	        		+ "		anhio			 AS anhio,"
-	        		+ "		numero_curso	 AS num_cur,"
-	        		+ " 	fecha_inicio	 AS f_ini,"
-	        		+ " 	fecha_fin		 AS f_fin,"
-	        		+ "		config_cursos	 AS con_cur,"
-	        		+ " 	estado			 AS est"
+	        		+ " 	cu.codigo			 AS cod,"
+	        		+ " 	cu.nombre			 AS nom,"
+	        		+ "		cu.anhio			 AS anhio,"
+	        		+ "		cu.numero_curso	 	 AS num_cur,"
+	        		+ " 	cu.fecha_inicio	 	 AS f_ini,"
+	        		+ " 	cu.fecha_fin		 AS f_fin,"
+	        		+ "		cu.config_cursos	 AS con_cur,"
+	        		+ " 	cu.estado			 AS est,"
+	        		+ "		cc.codigo			 AS cc_cod,"
+	        		+ " 	cc.descripcion		 AS cc_desc,"
+	        		+ "		cc.minutos_de_clase	 AS cc_m_d_c,"
+	        		+ "		cc.nro_max_alumnos	 AS cc_max_al,"
+	        		+ " 	cc.nro_min_alumnos	 AS cc_min_al,"
+	        		+ " 	cc.cantidad_clases	 AS cc_cc,"
+	        		+ "		cc.estado            AS cc_est"
 	        		+ " FROM"
-	        		+ " 	CURSOS "
+	        		+ " 	CURSOS cu "
+	        		+ " INNER JOIN CONFIG_CURSOS cc ON"
+	        		+ "		cc.codigo = cu.config_cursos"
 	        		+ " WHERE"
-	        		+ " 	codigo = ?";
+	        		+ " 	cu.codigo = ?";
 
 	        pst = con.prepareStatement(query);
 	        pst.setLong(1, codigo);
@@ -170,7 +180,9 @@ public class CursoDAO implements CursoDAOInterface {
 						rs.getDate("f_ini"), 
 						rs.getDate("f_fin"),
 						rs.getBoolean("est"), 
-						rs.getInt("con_cur"));
+						new ConfigCursos(rs.getInt("cc_cod"), rs.getString("cc_desc"), rs.getInt("cc_m_d_c"), rs.getInt("cc_max_al"), rs.getInt("cc_min_al"), rs.getInt("cc_cc"), rs.getBoolean("est"))
+						
+						);
 	        	return curso;
             }
 	    } catch (Exception ex) {
@@ -240,25 +252,34 @@ public class CursoDAO implements CursoDAOInterface {
 	    try {
 	    	Class.forName(JDBC_DRIVER);
 	        con = DriverManager.getConnection(DB_URL,USER,PASS);
-	        ArrayList<Curso> listaAlumnos = new ArrayList<>();
+	        ArrayList<Curso> listaCursos = new ArrayList<>();
 	        String query = ""
 	        		+ " SELECT"
-	        		+ " 	codigo			 AS cod,"
-	        		+ " 	nombre			 AS nom,"
-	        		+ "		anhio			 AS anhio,"
-	        		+ "		numero_curso	 AS num_cur,"
-	        		+ " 	fecha_inicio	 AS f_ini,"
-	        		+ " 	fecha_fin		 AS f_fin,"
-	        		+ "		config_cursos	 AS con_cur,"
-	        		+ " 	estado			 AS est"
+	        		+ " 	cu.codigo			 AS cod,"
+	        		+ " 	cu.nombre			 AS nom,"
+	        		+ "		cu.anhio			 AS anhio,"
+	        		+ "		cu.numero_curso	 	 AS num_cur,"
+	        		+ " 	cu.fecha_inicio	 	 AS f_ini,"
+	        		+ " 	cu.fecha_fin		 AS f_fin,"
+	        		+ "		cu.config_cursos	 AS con_cur,"
+	        		+ " 	cu.estado			 AS est,"
+	        		+ "		cc.codigo			 AS cc_cod,"
+	        		+ " 	cc.descripcion		 AS cc_desc,"
+	        		+ "		cc.minutos_de_clase	 AS cc_m_d_c,"
+	        		+ "		cc.nro_max_alumnos	 AS cc_max_al,"
+	        		+ " 	cc.nro_min_alumnos	 AS cc_min_al,"
+	        		+ " 	cc.cantidad_clases	 AS cc_cc,"
+	        		+ "		cc.estado            AS cc_est"
 	        		+ " FROM"
-	        		+ " 	CURSOS ";
+	        		+ " 	CURSOS cu "
+	        		+ " INNER JOIN CONFIG_CURSOS cc ON"
+	        		+ "		cc.codigo = cu.config_cursos";
 	        
 	        pst = con.prepareStatement(query);
 	        rs = pst.executeQuery();
 	        
 	        while (rs.next()) {
-	        	listaAlumnos.add(new Curso(
+	        	listaCursos.add(new Curso(
 						rs.getInt("cod"), 
 						rs.getString("nom"), 
 						rs.getInt("anhio"), 
@@ -266,9 +287,9 @@ public class CursoDAO implements CursoDAOInterface {
 						rs.getDate("f_ini"), 
 						rs.getDate("f_fin"),
 						rs.getBoolean("est"), 
-						rs.getInt("con_cur")));
+						new ConfigCursos(rs.getInt("cc_cod"), rs.getString("cc_desc"), rs.getInt("cc_m_d_c"), rs.getInt("cc_max_al"), rs.getInt("cc_min_al"), rs.getInt("cc_cc"), rs.getBoolean("est"))));
             }
-	        return listaAlumnos;
+	        return listaCursos;
 	    } catch (Exception ex) {
 	    	throw new BussinessException(new BussinessMessage(null, ex.toString()));
 	    } finally {

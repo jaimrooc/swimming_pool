@@ -1,0 +1,119 @@
+<div class="row">
+	<div class="col-xs-16">
+		<form name="form" novalidate class="form-horizontal">
+		    <fieldset>
+		        <legend>Clases</legend>
+		        
+		        <div class="form-group">
+			        <label for="curso" class="control-label col-sm-2">Cursos:</label>
+			        <div class="col-sm-14">
+				       	<select id="curso" name="curso" type="checkbox" ng-model="clase.curso" ng-options="curso.codigo as curso.nombre for curso in cursos" class="control-label col-sm-2" ng-change="detalleCurso()" required >
+				       		<option value="">Seleccione</option>
+				       	</select>
+			        	<span ng-show="form.curso.$error.required && form.curso.$dirty">El campo es requerido</span>
+		        	</div>
+		        	
+		        	<div class="row col-sm-4" ng-if="!form.curso.$error.required && form.curso.$dirty">
+		        		<div class="panel panel-default">
+		        			<div class="panel-heading">Descripci&oacute;n del curso</div>
+		        			<div class="panel-body">
+			        			<div class="form-group">
+			        				<label for="curso" class="control-label col-sm-2">Codigo:</label>			<div class="control-label col-sm-4">{{configCur.codigo}}</div>
+							       	<label for="curso" class="control-label col-sm-2">descripcion:</label>		<div class="control-label col-sm-4">{{configCur.descripcion}}</div>
+							       	<label for="curso" class="control-label col-sm-2">minutosDeClase:</label>	<div class="control-label col-sm-4">{{configCur.minutosDeClase}}</div>
+							       	<label for="curso" class="control-label col-sm-2">nroMaxAlumnos:</label>	<div class="control-label col-sm-4">{{configCur.nroMaxAlumnos}}</div>
+							       	<label for="curso" class="control-label col-sm-2">nroMinAlumnos:</label>	<div class="control-label col-sm-4">{{configCur.nroMinAlumnos}}</div>
+							       	<label for="curso" class="control-label col-sm-2">cantidadClases:</label>	<div class="control-label col-sm-4">{{configCur.cantidadClases}}</div>
+							       	<label for="curso" class="control-label col-sm-2">estado:</label>			<div class="control-label col-sm-4">{{configCur.estado}}</div>
+						       	</div>
+		        			</div>
+		        		</div>
+			        </div>
+		       	</div>
+		        
+		        <div ng-hide="form.curso.$error.required">
+			        <div class="form-group" >
+				        <label for="codigo" class="control-label col-sm-2">codigo:</label>
+				        <div class="col-sm-10">
+					        <input id="codigo" name="codigo" type="text" ng-model="clase.codigo" class="form-control" required maxlength="10"/>
+					        <span ng-show="form.codigo.$error.required && form.identificacion.$dirty">El campo es requerido</span>
+					        <span ng-show="form.codigo.$error.maxlength">La longitud maxima es de 10 digitos</span>
+				        </div>
+			        </div>
+			        
+			        <div class="form-group">
+				        <div class="col-md-2"><label for="lunes">Lunes:</label>			<input id="lunes" name="lunes" type="checkbox" ng-model="clase.diasSemana.lunes" /><br>				</div>
+				        <div class="col-md-2"><label for="martes">Martes:</label>		<input id="martes" name="martes" type="checkbox" ng-model="clase.diasSemana.martes" /><br>			</div>
+				        <div class="col-md-2"><label for="miercoles">Miercoles:</label>	<input id="miercoles" name="miercoles" type="checkbox" ng-model="clase.diasSemana.miercoles" /><br>	</div>
+				        <div class="col-md-2"><label for="jueves">Jueves:</label>		<input id="jueves" name="jueves" type="checkbox" ng-model="clase.diasSemana.jueves" /><br>			</div>
+				        <div class="col-md-2"><label for="viernes">viernes:</label>		<input id="viernes" name="viernes" type="checkbox" ng-model="clase.diasSemana.viernes" /><br>			</div>
+				        <div class="col-md-2"><label for="sabado">Sabado:</label>		<input id="sabado" name="sabado" type="checkbox" ng-model="clase.diasSemana.sabado" /><br>			</div>
+				        <div class="col-md-2"><label for="domingo">Domingo:</label>		<input id="domingo" name="domingo" type="checkbox" ng-model="clase.diasSemana.domingo" /><br>			</div>
+			        </div>
+			        
+			        <div class="form-group">
+				        <label for="horaIni" class="control-label col-sm-2">Hora Inicio:</label>
+				        <div class="col-sm-10">
+				        	<input id="horaIni" name="horaIni" type="time" ng-model="clase.horaIni" class="form-control" required maxlength="100" placeholder="hh:mm" ng-pattern="/(^[0-2][0-9]):([0-5][0-9])$/"/>
+<!-- 					        ng-pattern="/(^[0-2][0-9]):([0-5][0-9])$/"  -->
+					        <span ng-show="form.horaIni.$error.required && form.horaIni.$dirty">El campo es requerido</span>
+					        <span ng-show="form.horaIni.$error.maxlength">La longitud maxima es de 100 caracteres</span>
+					        <span ng-show="form.horaIni.$error.pattern">No cumple la expresi&oacute;n regular</span>
+				        </div>
+			        </div>
+	
+			        <div class="form-group">
+				        <label for="horaFin" class="control-label col-sm-2">Hora Fin:</label>
+				        <div class="col-sm-10">
+				        	<input id="horaFin" name="horaFin" type="text" ng-model="clase.horaFin" class="form-control" required maxlength="100" ng-pattern="/(^[0-2][0-9]):([0-5][0-9])$/" placeholder="hh:mm"/>
+					        <span ng-show="form.horaFin.$error.required && form.horaFin.$dirty">El campo es requerido</span>
+					        <span ng-show="form.horaFin.$error.maxlength">La longitud maxima es de 100 caracteres</span>
+				        </div>
+			        </div>
+			        
+			        <div class="form-group">
+				        <label for="profesor" class="control-label col-sm-2">Profesor:</label>
+				        <div class="col-sm-10">
+					       	<select id="profesor" name="profesor" type="checkbox" ng-model="clase.profesor" ng-options="prof.identificacion as prof.nombre for prof in profesores" class="control-label col-sm-2" required >
+					       		<option value="">Seleccione</option>
+					       	</select>
+				        	<span ng-show="form.profesor.$error.required && form.profesor.$dirty">El campo es requerido</span>
+			        	</div>
+			       	</div>
+			        
+			        <div class="form-group">
+				        <label for="profesorAux" class="control-label col-sm-2">Profesor Auxiliar:</label>
+				        <div class="col-sm-10">
+					       	<select id="profesorAux" name="profesorAux" type="checkbox" ng-model="clase.profesorAux" ng-options="prof.identificacion as prof.nombre for prof in profesores" class="control-label col-sm-2">
+					       		<option value="">Seleccione</option>
+					       	</select>
+			        	</div>
+			       	</div>
+	
+			        <div class="form-group">
+				        <label for="estado" class="control-label col-sm-2">Estado:</label>
+				        <div class="col-sm-10">
+				        	<input id="estado" name="estado" type="checkbox" ng-model="clase.estado"/>
+				        </div>
+			        </div>
+				</div>
+		    </fieldset>
+		    
+<!-- 		    estado -->
+		    
+		    <a href="#/Clase/listado" class="btn btn-info">Volver</a>
+		    <button ng-click="guardar()" ng-disabled="form.$invalid" class="btn btn-success">Guardar</button>
+		</form>
+
+		<div ng-show="bussinessMessages.length > 0">
+		    <div>Se han producido los siguientes errores</div>
+		    <ul>
+		        <li ng-repeat="bussinessMessage in bussinessMessages">
+		            <strong ng-hide="businessMessage.fieldName == null">{{bussinessMessage.fieldName}}:</strong>
+		            {{bussinessMessage.message}}.
+		        </li>
+		    </ul>
+		    <button ng-click="bussinessMessages = []" >Quitar mensajes</button>
+		</div>
+	</div>
+</div>

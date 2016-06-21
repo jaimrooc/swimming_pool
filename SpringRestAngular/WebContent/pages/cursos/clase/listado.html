@@ -1,0 +1,73 @@
+<div ng-show="bussinessMessages.length > 0">
+	<div class="alert alert-danger">
+		<div>Se han producido los siguientes errores:</div>
+		<ul>
+			<li ng-repeat="bussinessMessage in bussinessMessages">
+				<strong ng-hide="businessMessage.fieldName == null">{{bussinessMessage.fieldName}}:</strong> {{bussinessMessage.message}}.
+			</li>
+		</ul>
+<!-- 		<strong>Danger!</strong> Indicates a dangerous or potentially negative action. -->
+	</div>
+	
+	
+<!-- 	<button ng-click="bussinessMessages = []">Quitar mensajes</button> -->
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="form-group">
+			<label class="control-label col-sm-2">Filtrar por Descripcion:</label>
+			<div class="col-sm-10">
+				<input ng-model="clase.codigo" class="form-control">
+			</div>
+		</div>
+	</div>
+</div>
+<br>
+
+<a href="#/" class="btn btn-info">Atras</a>
+<a ng-href="#/Clase/new" class="btn btn-success">Nuevo Registro</a>
+
+<table class="table table-bordered table-striped">
+	<thead>
+		<tr>
+			<th>Codigo</th>
+			<th>Hora Inicio</th>
+			<th>Hora Fin</th>
+			<th>Curso</th>
+			<th>Profesor</th>
+			<th>Profesor Auxiliar</th>
+			<th>Estado</th>
+			<th>Acci&oacute;n</th>
+		</tr>
+	</thead>
+	<tfoot>
+		<tr>
+			<td colspan="7">El Nro de configuraciones es:</td>
+			<td ng-bind="clasess.length"></td>
+		</tr>
+	</tfoot>
+	<tbody>
+		<tr ng-repeat="clase in clases | filteri18n:{codigo : clase.codigo}">
+			<td><a ng-href="#/ConfigCursos/edit/{{clase.codigo}}">{{clase.codigo}}</a></td>
+			<td>{{clase.horaIni | date:'hh:mm'}}</td>
+			<td>{{clase.horaFin | date:'hh:mm'}}</td>
+			<td>{{clase.curso}}</td>
+			<td>{{clase.profesor}}</td>
+			<td>{{clase.profesorAux}}</td>
+			<td>
+				<div ng-switch on="clase.estado">
+					<div ng-switch-when="true"><img alt="Is true" src="resources/img/true.png"/></div>
+					<div ng-switch-when="false"><img alt="Is False" src="resources/img/false.png"/></div>
+					<div ng-switch-default>N/A</div>
+				</div>
+			</td>
+			<td>
+				<button ng-click="borrar(clase.codigo)" class="btn btn-danger">Borrar</button>
+				<a ng-href="#/Clase/edit/{{clase.codigo}}">
+					<button class="btn btn-success">Editar</button>
+				</a>
+			</td>
+		</tr>
+	</tbody>
+</table>

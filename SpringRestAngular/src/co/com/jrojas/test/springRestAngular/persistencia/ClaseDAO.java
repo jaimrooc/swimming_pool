@@ -46,8 +46,13 @@ public class ClaseDAO implements ClaseDAOInterface {
 	        pst.setInt(1, clase.getCodigo());
 	        pst.setInt(2, clase.getCurso());
 	        pst.setLong(3, clase.getProfesor());
-	        pst.setLong(4, clase.getProfesorAux());
-	        pst.setString(5, clase.getDia());
+	        if (clase.getProfesorAux() == null) {
+	        	pst.setNull(4, java.sql.Types.NUMERIC);
+	        } else {
+	        	pst.setLong(4, clase.getProfesorAux());
+	        }
+	        
+	        pst.setString(5, clase.getDiasSemana().entityToDB());
 	        pst.setDate(6,  new java.sql.Date(clase.getHoraIni().getTime()));
 	        pst.setDate(7, new java.sql.Date(clase.getHoraFin().getTime()));
 	        pst.setBoolean(8, clase.getEstado() == null ? true : clase.getEstado());
@@ -101,8 +106,13 @@ public class ClaseDAO implements ClaseDAOInterface {
 
 	        pst.setInt(1, clase.getCurso());
 	        pst.setLong(2, clase.getProfesor());
-	        pst.setLong(3, clase.getProfesorAux());
-	        pst.setString(4, clase.getDia());
+//	        pst.setLong(3, clase.getProfesorAux());
+	        if (clase.getProfesorAux() == null) {
+	        	pst.setNull(3, java.sql.Types.NUMERIC);
+	        } else {
+	        	pst.setLong(3, clase.getProfesorAux());
+	        }
+	        pst.setString(4, clase.getDiasSemana().entityToDB());
 	        pst.setDate(5,  new java.sql.Date(clase.getHoraIni().getTime()));
 	        pst.setDate(6, new java.sql.Date(clase.getHoraFin().getTime()));
 	        pst.setBoolean(7, clase.getEstado() == null ? true : clase.getEstado());

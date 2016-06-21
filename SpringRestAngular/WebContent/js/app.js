@@ -1,7 +1,7 @@
 //####################################################################################################//
 //######################################### MODULE ###################################################//
 //####################################################################################################//
-var app = angular.module("app", ['ngRoute', 'ui.bootstrap.demo']);
+var app = angular.module("app", ['ngRoute']);
 
 //####################################################################################################//
 //######################################### CONSTANTES ###############################################//
@@ -726,13 +726,22 @@ app.config(['$routeProvider', function($routeProvider) {
         resolve: {
         	curso : ['remoteResource', '$route', function(remoteResource, $route) {
         		return remoteResource.getCurso($route.current.params.codigo);
-        	}]
+        	}],
+        	configCursos: ['remoteResource', function(remoteResource) {
+        		return remoteResource.listConfigCurs();
+    		}]
         }
     });
 
     $routeProvider.when('/Curso/new', {
         templateUrl: "pages/cursos/curso/detalle.html",
-        controller: "NewCursosController"
+        controller: "NewCursosController",
+        resolve: {
+        	configCursos: ['remoteResource', function(remoteResource) {
+        		return remoteResource.listConfigCurs();
+    		}]
+        }
+        	
     });
     
 	// --------------------------------------------- CLASE --------------------------------------------- //
@@ -752,13 +761,27 @@ app.config(['$routeProvider', function($routeProvider) {
         resolve: {
         	clase : ['remoteResource', '$route', function(remoteResource, $route) {
         		return remoteResource.getClase($route.current.params.codigo);
-        	}]
+        	}],
+        	profesores: ['remoteResource', function(remoteResource) {
+        		return remoteResource.listProf();
+    		}],
+        	cursos: ['remoteResource', function(remoteResource) {
+        		return remoteResource.listCurso();
+    		}]
         }
     });
 
     $routeProvider.when('/Clase/new', {
         templateUrl: "pages/cursos/clase/detalle.html",
-        controller: "NewClaseController"
+        controller: "NewClaseController",
+        resolve: {
+        	profesores: ['remoteResource', function(remoteResource) {
+        		return remoteResource.listProf();
+    		}],
+        	cursos: ['remoteResource', function(remoteResource) {
+        		return remoteResource.listCurso();
+    		}]
+        }
     });
     
     // --------------------------------------------- Alumnos --------------------------------------------- //
@@ -852,124 +875,6 @@ app.config(['$routeProvider', function($routeProvider) {
     		}]
         }
     });
-    
-    //--------------------------------------------- Cursos -------------------------------------------------------- //
-	// ***** NUEVO ***** //
-	app.controller("NewCursosController", ['$scope', 'remoteResource', '$location', function($scope, remoteResource, $location) {
-		$scope.curso = {
-			codigo: undefined,
-			nombre: "",
-			anhio: undefined,
-			numeroCurso: undefined,
-			fechaInicio: undefined,
-			fechaFin: undefined,
-			configCursos: undefined,
-			clases: undefined,
-			estado: undefined
-	    };
-		
-		$scope.guardar = function() {
-			if ($scope.form.$valid) {
-				remoteResource.insertCurso($scope.curso).then(function() {
-					$location.path("/Curso/listado");
-				}, function(bussinessMessages) {
-					$scope.bussinessMessages = bussinessMessages;
-				});
-			} else {
-				alert("Hay datos inválidos");
-			}
-		};
-	}]);
-	// ***** EDIT ***** //
-	app.controller("EditCursosController", ['$scope', 'curso', 'remoteResource', '$location', function($scope, curso, remoteResource, $location) {
-		$scope.curso = curso;
-	
-	    $scope.guardar = function() {
-	        if ($scope.form.$valid) {
-	            remoteResource.updateCurso($scope.curso.codigo, $scope.curso).then(function() {
-	                $location.path("/Curso/listado");
-	            }, function(bussinessMessages) {
-	                $scope.bussinessMessages = bussinessMessages;
-	            });
-	        } else {
-	            alert("Hay datos inválidos");
-	        }
-	    };
-	}]);
-	// ***** LIST ***** //
-	app.controller("ListadoCursosController", ['$scope', 'cursos', 'remoteResource', function($scope, cursos, remoteResource) {
-		$scope.cursos = cursos;
-		
-		$scope.borrar = function(codigo) {
-			remoteResource.removeCurso(codigo).then(function() {
-				remoteResource.listCurso().then(function(curso) {
-					$scope.curso = curso;
-	            }, function(bussinessMessages) {
-	            	$scope.bussinessMessages = bussinessMessages;
-	            });
-	        }, function(bussinessMessages) {
-	            $scope.bussinessMessages = bussinessMessages;
-	        });
-	    };
-	}]);
-	//--------------------------------------------- Clases -------------------------------------------------------- //
-	// ***** NUEVO ***** //
-	app.controller("NewClaseController", ['$scope', 'remoteResource', '$location', function($scope, remoteResource, $location) {
-		$scope.clase = {
-			codigo: undefined,
-			dia: undefined,
-			horaIni: undefined,
-			horaFin: undefined,
-			curso: undefined,
-			profesor: undefined,
-			profesorAux: undefined,
-			estado: undefined
-	    };
-		
-		$scope.guardar = function() {
-			if ($scope.form.$valid) {
-				remoteResource.insertClase($scope.clase).then(function() {
-					$location.path("/Clase/listado");
-				}, function(bussinessMessages) {
-					$scope.bussinessMessages = bussinessMessages;
-				});
-			} else {
-				alert("Hay datos inválidos");
-			}
-		};
-	}]);
-	// ***** EDIT ***** //
-	app.controller("EditClaseController", ['$scope', 'clase', 'remoteResource', '$location', function($scope, clase, remoteResource, $location) {
-		$scope.clase = clase;
-	
-	    $scope.guardar = function() {
-	        if ($scope.form.$valid) {
-	            remoteResource.updateClase($scope.clase.codigo, $scope.clase).then(function() {
-	                $location.path("/Clase/listado");
-	            }, function(bussinessMessages) {
-	                $scope.bussinessMessages = bussinessMessages;
-	            });
-	        } else {
-	            alert("Hay datos inválidos");
-	        }
-	    };
-	}]);
-	// ***** LIST ***** //
-	app.controller("ListadoClaseController", ['$scope', 'clases', 'remoteResource', function($scope, clases, remoteResource) {
-		$scope.clases = clases;
-		
-		$scope.borrar = function(codigo) {
-			remoteResource.removeClase(codigo).then(function() {
-				remoteResource.listClase().then(function(clases) {
-					$scope.clases = clases;
-	            }, function(bussinessMessages) {
-	            	$scope.bussinessMessages = bussinessMessages;
-	            });
-	        }, function(bussinessMessages) {
-	            $scope.bussinessMessages = bussinessMessages;
-	        });
-	    };
-	}]);
 }]);
 
 //####################################################################################################//
@@ -1019,13 +924,12 @@ app.filter("filteri18n", ["$filter", function($filter) {
 //####################################################################################################//
 //######################################### DIRECTIVE ################################################//
 //####################################################################################################//
-app.directive('caDatepicker', [function(dateFormat) {
+app.directive('caDatepicker', [function() {
 	return {
 		restrict: 'A',
 		link: function($scope, element, attributes) {
-			
 			element.datepicker({
-				dateFormat: attributes.caDatepicker,
+				dateFormat: "yyyy-MM-dd",
 				onSelect: function() {
 					$(this).trigger('change');
 				}
@@ -1037,6 +941,149 @@ app.directive('caDatepicker', [function(dateFormat) {
 //####################################################################################################//
 //######################################### CONTROLLER ###############################################//
 //####################################################################################################//
+//--------------------------------------------- Cursos -------------------------------------------------------- //
+// ***** NUEVO ***** //
+app.controller("NewCursosController", ['$scope', 'remoteResource', 'configCursos', '$location', function($scope, remoteResource, configCursos, $location) {
+	$scope.configCursos = configCursos;
+	$scope.curso = {
+		codigo: undefined,
+		nombre: "",
+		anhio: undefined,
+		numeroCurso: undefined,
+		fechaInicio: undefined,
+		fechaFin: undefined,
+		configCursos: undefined,
+		estado: undefined
+    };
+	
+	$scope.guardar = function() {
+		if ($scope.form.$valid) {
+			remoteResource.insertCurso($scope.curso).then(function() {
+				$location.path("/Curso/listado");
+			}, function(bussinessMessages) {
+				$scope.bussinessMessages = bussinessMessages;
+			});
+		} else {
+			alert("Hay datos inválidos");
+		}
+	};
+}]);
+// ***** EDIT ***** //
+app.controller("EditCursosController", ['$scope', 'curso', 'configCursos', 'remoteResource', '$location', function($scope, curso, configCursos, remoteResource, $location) {
+	$scope.curso = curso;
+	$scope.configCursos = configCursos;
+
+    $scope.guardar = function() {
+        if ($scope.form.$valid) {
+            remoteResource.updateCurso($scope.curso.codigo, $scope.curso).then(function() {
+                $location.path("/Curso/listado");
+            }, function(bussinessMessages) {
+                $scope.bussinessMessages = bussinessMessages;
+            });
+        } else {
+            alert("Hay datos inválidos");
+        }
+    };
+}]);
+// ***** LIST ***** //
+app.controller("ListadoCursosController", ['$scope', 'cursos', 'remoteResource', function($scope, cursos, remoteResource) {
+	$scope.cursos = cursos;
+	
+	$scope.borrar = function(codigo) {
+		remoteResource.removeCurso(codigo).then(function() {
+			remoteResource.listCurso().then(function(curso) {
+				$scope.curso = curso;
+            }, function(bussinessMessages) {
+            	$scope.bussinessMessages = bussinessMessages;
+            });
+        }, function(bussinessMessages) {
+            $scope.bussinessMessages = bussinessMessages;
+        });
+    };
+}]);
+//--------------------------------------------- Clases -------------------------------------------------------- //
+// ***** NUEVO ***** //
+app.controller("NewClaseController", ['$scope', 'remoteResource', 'profesores', 'cursos', '$location', function($scope, remoteResource, profesores, cursos, $location) {
+	$scope.profesores = profesores;
+	$scope.cursos = cursos;
+	$scope.configCur = null;
+	$scope.clase = {
+		codigo: undefined,
+//		dia: undefined,
+		horaIni: undefined,
+		horaFin: undefined,
+		curso: undefined,
+		profesor: undefined,
+		profesorAux: undefined,
+		estado: undefined,
+		diasSemana: {
+			 lunes: false,
+			 martes: false,
+			 miercoles: false,
+			 jueves: false,
+			 viernes: false,
+			 sabado: false,
+			 domingo: false
+		}
+    };
+	
+	$scope.guardar = function() {
+		if ($scope.form.$valid) {
+			remoteResource.insertClase($scope.clase).then(function() {
+				$location.path("/Clase/listado");
+			}, function(bussinessMessages) {
+				$scope.bussinessMessages = bussinessMessages;
+			});
+		} else {
+			alert("Hay datos inválidos");
+		}
+	};
+	
+	console.log("Scan ini");
+	$scope.detalleCurso = function() {
+		remoteResource.getConfigCurs($scope.clase.curso).then(function(configCur) {
+			console.log("ingreso:"  + configCur );
+			$scope.configCur = configCur;
+        }, function(bussinessMessages) {
+            $scope.bussinessMessages = bussinessMessages;
+        });
+    };
+    console.log("Scan fin");
+}]);
+// ***** EDIT ***** //
+app.controller("EditClaseController", ['$scope', 'clase', 'profesores', 'cursos', 'remoteResource', '$location', function($scope, clase, profesores, cursos, remoteResource, $location) {
+	$scope.clase = clase;
+	$scope.profesores = profesores;
+	$scope.cursos = cursos;
+
+    $scope.guardar = function() {
+        if ($scope.form.$valid) {
+            remoteResource.updateClase($scope.clase.codigo, $scope.clase).then(function() {
+                $location.path("/Clase/listado");
+            }, function(bussinessMessages) {
+                $scope.bussinessMessages = bussinessMessages;
+            });
+        } else {
+            alert("Hay datos inválidos");
+        }
+    };
+}]);
+// ***** LIST ***** //
+app.controller("ListadoClaseController", ['$scope', 'clases', 'remoteResource', function($scope, clases, remoteResource) {
+	$scope.clases = clases;
+	
+	$scope.borrar = function(codigo) {
+		remoteResource.removeClase(codigo).then(function() {
+			remoteResource.listClase().then(function(clases) {
+				$scope.clases = clases;
+            }, function(bussinessMessages) {
+            	$scope.bussinessMessages = bussinessMessages;
+            });
+        }, function(bussinessMessages) {
+            $scope.bussinessMessages = bussinessMessages;
+        });
+    };
+}]);
 //--------------------------------------------- Alumno -------------------------------------------------------- //
 //***** NUEVO ***** //
 app.controller("NewAlumnoController", ['$scope', 'remoteResource', 'tiposDocumentos','$location', function($scope, remoteResource, tiposDocumentos, $location) {
