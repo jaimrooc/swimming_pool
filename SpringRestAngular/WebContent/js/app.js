@@ -780,6 +780,9 @@ app.config(['$routeProvider', function($routeProvider) {
     		}],
         	cursos: ['remoteResource', function(remoteResource) {
         		return remoteResource.listCurso();
+    		}], 
+        	alumnos: ['remoteResource', function(remoteResource) {
+        		return remoteResource.list();
     		}]
         }
     });
@@ -1003,13 +1006,28 @@ app.controller("ListadoCursosController", ['$scope', 'cursos', 'remoteResource',
 }]);
 //--------------------------------------------- Clases -------------------------------------------------------- //
 // ***** NUEVO ***** //
-app.controller("NewClaseController", ['$scope', 'remoteResource', 'profesores', 'cursos', '$location', function($scope, remoteResource, profesores, cursos, $location) {
+app.controller("NewClaseController", ['$scope', 'remoteResource', 'alumnos', 'profesores', 'cursos', '$location', function($scope, remoteResource, alumnos, profesores, cursos, $location) {
 	$scope.profesores = profesores;
 	$scope.cursos = cursos;
 	$scope.configCur = null;
+	
+	$scope.alumnos = alumnos;
+	$scope.alumnosDeClase = [];
+	$scope.filtroAlumnos = "";
+	
+	$scope.agregarNuevo = function(idx, alumno) {
+		$scope.alumnosDeClase.push($scope.alumnos[idx]);
+		$scope.alumnos.splice(idx, 1);
+		$scope.filtroAlumnos = "";
+	};
+	$scope.quitar = function(idx) {
+		$scope.alumnos.push($scope.alumnosDeClase[idx]);
+		$scope.alumnosDeClase.splice(idx, 1);
+		$scope.filtroAlumnos = "";
+	};
+	
 	$scope.clase = {
 		codigo: undefined,
-//		dia: undefined,
 		horaIni: undefined,
 		horaFin: undefined,
 		curso: undefined,
@@ -1039,16 +1057,13 @@ app.controller("NewClaseController", ['$scope', 'remoteResource', 'profesores', 
 		}
 	};
 	
-	console.log("Scan ini");
 	$scope.detalleCurso = function() {
 		remoteResource.getConfigCurs($scope.clase.curso).then(function(configCur) {
-			console.log("ingreso:"  + configCur );
 			$scope.configCur = configCur;
         }, function(bussinessMessages) {
             $scope.bussinessMessages = bussinessMessages;
         });
     };
-    console.log("Scan fin");
 }]);
 // ***** EDIT ***** //
 app.controller("EditClaseController", ['$scope', 'clase', 'profesores', 'cursos', 'remoteResource', '$location', function($scope, clase, profesores, cursos, remoteResource, $location) {
@@ -1096,7 +1111,7 @@ app.controller("NewAlumnoController", ['$scope', 'remoteResource', 'tiposDocumen
 		apellidoSegundo: undefined,
 		fechaNacimiento: "",
 		tipoIdentificacion: ""
- };
+	};
 	
 	$scope.guardar = function() {
 		if ($scope.form.$valid) {
@@ -1264,7 +1279,6 @@ app.controller("ListadoProfesorController", ['$scope', 'profesores', 'tiposDocum
 		fechaNacimiento: new Date(),
 		tipoIdentificacion: ""
 	};
-	console.log($scope.profesor);
 	
 	$scope.borrar = function(identificacion) {
 		remoteResource.removeProf(identificacion).then(function() {
