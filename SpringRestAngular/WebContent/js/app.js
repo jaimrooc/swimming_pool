@@ -437,6 +437,131 @@ function RemoteResource($http, $q, baseUrl) {
 
         return promise;
     };
+    
+    // --------------------------------------------- Datos De Clase --------------------------------------------- //
+	// Metodo 'GET' encargado de obtener un objeto teniendo como referencia un codigo
+	this.getDatosClase = function(codigo) {
+		var defered = $q.defer();
+		var promise = defered.promise;
+		
+		$http({
+			method: 'GET',
+			url: baseUrl + '/api/DatosClases/' + codigo
+        }).success(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado fue exitosos
+            defered.resolve(data);
+        }).error(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado NO fue exitosos
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+        return promise;
+    };
+    
+    // Metodo 'LIST' encargado de obtener una lista de objectos
+    this.listDatosClase = function() {
+        var defered = $q.defer();
+        var promise = defered.promise;
+
+        $http({
+            method: 'GET',
+            url: baseUrl + '/api/DatosClases'
+        }).success(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado fue exitosos
+            defered.resolve(data);
+        }).error(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado NO fue exitosos
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+        return promise;
+    };
+    
+    // Metodo 'LIST' encargado de obtener una lista de objectos
+    this.listDatosClaseAlumnos = function() {
+        var defered = $q.defer();
+        var promise = defered.promise;
+
+        $http({
+            method: 'GET',
+            url: baseUrl + '/api/DatosClases/list'
+        }).success(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado fue exitosos
+            defered.resolve(data);
+        }).error(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado NO fue exitosos
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+        return promise;
+    };
+
+    // Metodo 'INSERT' encargado de almacenar objectos
+    this.insertDatosClase = function(datosClase) {
+        var defered = $q.defer();
+        var promise = defered.promise;
+
+        $http({
+            method: 'POST',
+            url: baseUrl + '/api/DatosClases/list',
+            data: datosClase
+        }).success(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado fue exitosos
+            defered.resolve(data);
+        }).error(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado NO fue exitosos
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+        return promise;
+    };
+    
+    // Metodo 'UPDATE' encargado de modificar un objecto
+    this.updateDatosClase = function(codigo, datosClase) {
+        var defered = $q.defer();
+        var promise = defered.promise;
+
+        $http({
+            method: 'PUT',
+            url: baseUrl + '/api/DatosClases/' + codigo,
+            data: datosClase
+        }).success(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado fue exitosos
+            defered.resolve(data);
+        }).error(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado NO fue exitosos
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+
+        return promise;
+    };
+
+    // Metodo 'DELETE' encargado de eliminar un objecto
+    this.removeDatosClase = function(codigo) {
+        var defered = $q.defer();
+        var promise = defered.promise;
+
+        $http({
+            method: 'DELETE',
+            url: baseUrl + '/api/DatosClases/' + codigo
+        }).success(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado fue exitosos
+            defered.resolve(data);
+        }).error(function(data, status, headers, config) { // Metodo que se ejecuta si el resultado NO fue exitosos
+            if (status === 400) {
+                defered.reject(data);
+            } else {
+                throw new Error("Fallo obtener los datos:" + status + "\n" + data);
+            }
+        });
+
+        return promise;
+    };
  // --------------------------------------------- Cursos --------------------------------------------- //
 	// Metodo 'GET' encargado de obtener un objeto teniendo como referencia un codigo
 	this.getCurso = function(codigo) {
@@ -767,6 +892,12 @@ app.config(['$routeProvider', function($routeProvider) {
     		}],
         	cursos: ['remoteResource', function(remoteResource) {
         		return remoteResource.listCurso();
+    		}],
+    		alumnosDeClase: ['remoteResource', function(remoteResource) {
+        		return remoteResource.listDatosClaseAlumnos();
+    		}], 
+        	alumnos: ['remoteResource', function(remoteResource) {
+        		return remoteResource.list();
     		}]
         }
     });
@@ -820,7 +951,6 @@ app.config(['$routeProvider', function($routeProvider) {
             }]
         }
     });
-    
     // --------------------------------------------- Tipos De Documento --------------------------------------------- //
     $routeProvider.when('/TiposDocumento/listado', {
         templateUrl: "pages/tipoDocumento/listado.html",
@@ -1010,10 +1140,16 @@ app.controller("NewClaseController", ['$scope', 'remoteResource', 'alumnos', 'pr
 	$scope.profesores = profesores;
 	$scope.cursos = cursos;
 	$scope.configCur = null;
-	
+	$scope.visualizarAlumnos = false;
+
+	$scope.esEdicion = false;
 	$scope.alumnos = alumnos;
 	$scope.alumnosDeClase = [];
 	$scope.filtroAlumnos = "";
+	$scope.wrapperDatosClienteLite = {
+		clase: undefined,
+		alumnos: []
+	};
 	
 	$scope.agregarNuevo = function(idx, alumno) {
 		$scope.alumnosDeClase.push($scope.alumnos[idx]);
@@ -1048,7 +1184,29 @@ app.controller("NewClaseController", ['$scope', 'remoteResource', 'alumnos', 'pr
 	$scope.guardar = function() {
 		if ($scope.form.$valid) {
 			remoteResource.insertClase($scope.clase).then(function() {
+				$scope.visualizarAlumnos = true;
+			}, function(bussinessMessages) {
+				$scope.bussinessMessages = bussinessMessages;
+			});
+		} else {
+			alert("Hay datos inválidos");
+		}
+	};
+	
+	$scope.guardarAlumnos = function() {
+		if ($scope.form.$valid) {
+			
+			$scope.wrapperDatosClienteLite.clase = $scope.clase.codigo; 
+			var lista = $scope.alumnosDeClase;
+			for (i = 0; i < lista.length; i++) {
+				$scope.wrapperDatosClienteLite.alumnos.push(lista[i].identificacion);
+			}
+			
+			remoteResource.insertDatosClase($scope.wrapperDatosClienteLite).then(function() {
 				$location.path("/Clase/listado");
+//			remoteResource.insertDatosClase($scope.alumnosDeClase).then(function() {
+//				$location.path("/Clase/listado");
+//				$scope.visualizarAlumnos = true;
 			}, function(bussinessMessages) {
 				$scope.bussinessMessages = bussinessMessages;
 			});
@@ -1066,15 +1224,49 @@ app.controller("NewClaseController", ['$scope', 'remoteResource', 'alumnos', 'pr
     };
 }]);
 // ***** EDIT ***** //
-app.controller("EditClaseController", ['$scope', 'clase', 'profesores', 'cursos', 'remoteResource', '$location', function($scope, clase, profesores, cursos, remoteResource, $location) {
+app.controller("EditClaseController", ['$scope', 'clase', 'alumnosDeClase', 'profesores', 'alumnos', 'cursos', 'remoteResource', '$location', function($scope, clase, alumnosDeClase, profesores, alumnos, cursos, remoteResource, $location) {
 	$scope.clase = clase;
 	$scope.profesores = profesores;
 	$scope.cursos = cursos;
+	
+	$scope.alumnos = alumnos;
+	
+	$scope.alumnosDeClase = alumnosDeClase;
+	$scope.alumnosDeClaseEliminar = [];
+	$scope.visualizarAlumnos = false;
+	$scope.esEdicion = true;
+	
+	// filtrado de datos
+	for (i = 0; i < $scope.alumnosDeClase.length; i++) {
+		for (j = 0; j < $scope.alumnos.length; j++) {
+			if($scope.alumnosDeClase[i].identificacion == $scope.alumnos[j].identificacion) {
+				$scope.alumnos.splice(j, 1);
+				break;
+			}
+		}
+	}
+	
+	$scope.agregarNuevo = function(idx, alumno) {
+		$scope.alumnosDeClase.push($scope.alumnos[idx]);
+		$scope.alumnos.splice(idx, 1);
+		$scope.filtroAlumnos = "";
+	};
+	$scope.quitar = function(idx) {
+		$scope.alumnos.push($scope.alumnosDeClase[idx]);
+		$scope.alumnosDeClase.splice(idx, 1);
+		$scope.filtroAlumnos = "";
+	};
+	
 
+	$scope.wrapperDatosClienteLite = {
+		clase: undefined,
+		alumnos: []
+	};
+	
     $scope.guardar = function() {
         if ($scope.form.$valid) {
             remoteResource.updateClase($scope.clase.codigo, $scope.clase).then(function() {
-                $location.path("/Clase/listado");
+//                $location.path("/Clase/listado");
             }, function(bussinessMessages) {
                 $scope.bussinessMessages = bussinessMessages;
             });
@@ -1082,6 +1274,28 @@ app.controller("EditClaseController", ['$scope', 'clase', 'profesores', 'cursos'
             alert("Hay datos inválidos");
         }
     };
+    
+    $scope.guardarAlumnos = function() {
+		if ($scope.form.$valid) {
+			// TODO TODO TODO 
+			$scope.wrapperDatosClienteLite.clase = $scope.clase.codigo; 
+			var lista = $scope.alumnosDeClase;
+			for (i = 0; i < lista.length; i++) {
+				$scope.wrapperDatosClienteLite.alumnos.push(lista[i].identificacion);
+			}
+			
+			remoteResource.insertDatosClase($scope.wrapperDatosClienteLite).then(function() {
+				$location.path("/Clase/listado");
+//			remoteResource.insertDatosClase($scope.alumnosDeClase).then(function() {
+//				$location.path("/Clase/listado");
+//				$scope.visualizarAlumnos = true;
+			}, function(bussinessMessages) {
+				$scope.bussinessMessages = bussinessMessages;
+			});
+		} else {
+			alert("Hay datos inválidos");
+		}
+	};
 }]);
 // ***** LIST ***** //
 app.controller("ListadoClaseController", ['$scope', 'clases', 'remoteResource', function($scope, clases, remoteResource) {

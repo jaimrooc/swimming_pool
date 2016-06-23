@@ -44,7 +44,7 @@ CREATE TABLE CURSOS (
 );
 
 CREATE TABLE CLASES (
-	codigo				INTEGER,
+	codigo				BIGINT,
 	curso				INTEGER,
 	profesor			BIGINT,
 	profesor_aux		BIGINT,
@@ -52,6 +52,12 @@ CREATE TABLE CLASES (
 	hora_ini			DATE,
 	hora_fin			DATE,
 	estado				BOOLEAN
+);
+
+CREATE TABLE DATOS_CLASES (
+	codigo				INTEGER,
+	clase				INTEGER,
+	alumno		 		BIGINT
 );
 
 /* ************* REGLAS ************* */
@@ -102,3 +108,8 @@ ALTER TABLE CLASES ADD CONSTRAINT nn_clas_dia CHECK (dia IS NOT NULL);
 ALTER TABLE CLASES ADD CONSTRAINT nn_clas_hor_ini CHECK (hora_ini IS NOT NULL);
 ALTER TABLE CLASES ADD CONSTRAINT nn_clas_hor_fin CHECK (hora_fin IS NOT NULL);
 ALTER TABLE CLASES ADD CONSTRAINT nn_clas_est CHECK (estado IS NOT NULL);
+
+-- DATOS_CLASES
+ALTER TABLE DATOS_CLASES ADD CONSTRAINT pk_d_c_datos_clase PRIMARY KEY (codigo);
+ALTER TABLE DATOS_CLASES ADD CONSTRAINT fk_d_c_clase FOREIGN KEY (clase) REFERENCES CLASES(codigo);
+ALTER TABLE DATOS_CLASES ADD CONSTRAINT fk_d_c_alumno FOREIGN KEY (clase) REFERENCES ALUMNOS(identificacion);

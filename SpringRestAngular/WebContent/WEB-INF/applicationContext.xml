@@ -16,4 +16,5 @@
 	<bean class="co.com.jrojas.test.springRestAngular.persistencia.ConfigCursosDAO" />
 	<bean class="co.com.jrojas.test.springRestAngular.persistencia.ClaseDAO" />
 	<bean class="co.com.jrojas.test.springRestAngular.persistencia.CursoDAO" />
+	<bean class="co.com.jrojas.test.springRestAngular.persistencia.DatosClaseDAO" />
 </beans>

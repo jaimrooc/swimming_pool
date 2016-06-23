@@ -1,6 +1,8 @@
 package co.com.jrojas.test.springRestAngular.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -25,6 +27,23 @@ public class Alumno {
 		this.apellidoSegundo = apellidoSegundo;
 		this.fechaNacimiento = fechaNacimiento;
 		this.tipoIdentificacion = tipoIdentificacion;
+	}
+	
+	public Alumno(Map mapa) {
+		try {
+			this.identificacion = Long.parseLong(mapa.get("identificacion").toString());
+			this.nombre = mapa.get("nombre").toString();
+			this.apellidoPrimero = mapa.get("apellidoPrimero").toString();
+			this.apellidoSegundo = mapa.get("apellidoSegundo").toString();
+			this.fechaNacimiento = new SimpleDateFormat("yyyy-MM-dd").parse(mapa.get("fechaNacimiento").toString());
+			this.tipoIdentificacion = Long.parseLong(mapa.get("tipoIdentificacion").toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public Alumno(Long identificacion) {
+		this.identificacion = identificacion;
 	}
 
 	public Long getIdentificacion() {

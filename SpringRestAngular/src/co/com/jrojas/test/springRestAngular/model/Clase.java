@@ -1,5 +1,6 @@
 package co.com.jrojas.test.springRestAngular.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -18,6 +19,8 @@ public class Clase {
 	private Long profesor;
 	private Long profesorAux;
 	private DiasSemana diasSemana;
+	
+	private ArrayList<DatosClases> alumnosDeClase;
 
 	public Clase() {
 	}
@@ -106,5 +109,13 @@ public class Clase {
 
 	public void setDiasSemana(DiasSemana diasSemana) {
 		this.diasSemana = diasSemana;
+	}
+
+	public ArrayList<DatosClases> getAlumnosDeClase() {
+		return alumnosDeClase;
+	}
+
+	public void setAlumnosDeClase(ArrayList<DatosClases> alumnosDeClase) {
+		this.alumnosDeClase = alumnosDeClase;
 	}
 }

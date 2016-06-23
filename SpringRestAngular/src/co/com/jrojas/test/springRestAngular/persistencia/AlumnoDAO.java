@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.com.jrojas.test.springRestAngular.model.Alumno;
+import co.com.jrojas.test.springRestAngular.model.DatosClases;
 import co.com.jrojas.test.springRestAngular.model.exceptions.BussinessException;
 import co.com.jrojas.test.springRestAngular.model.exceptions.BussinessMessage;
 import co.com.jrojas.test.springRestAngular.persistencia.interfaces.AlumnoDAOInterface;
@@ -252,6 +253,70 @@ public class AlumnoDAO implements AlumnoDAOInterface {
 	        			rs.getDate("fecha_nac"), 
 	        			rs.getLong("tip_id")));
             }
+	        return listaAlumnos;
+	    } catch (Exception ex) {
+	    	throw new BussinessException(new BussinessMessage(null, ex.toString()));
+	    } finally {
+	        try {
+	            if (rs != null) {
+	                rs.close();
+	            }
+	            if (pst != null) {
+	                pst.close();
+	            }
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ex) {
+	            System.out.println("Al cerrar conexiones: " + ex);
+	            return null;
+	        }
+	    }
+	}
+
+	@Override
+	public List<Alumno> alumnosPorCurso() throws BussinessException {
+		Connection con = null;
+	    PreparedStatement pst = null;
+	    ResultSet rs = null;
+
+	    try {
+	    	Class.forName(JDBC_DRIVER);
+	        con = DriverManager.getConnection(DB_URL,USER,PASS);
+	        ArrayList<Alumno> listaAlumnos = new ArrayList<>();	  
+	        
+	        DatosClaseDAO datosClaseDAO = new DatosClaseDAO();
+	        for(DatosClases datoClase : datosClaseDAO.findAll()) {
+
+	        	
+	        	String query = ""
+		        		+ " SELECT"
+		        		+ " 	identificacion AS id,"
+		        		+ " 	tipo_identificacion AS tip_id,"
+		        		+ "		nombre AS nombre,"
+		        		+ "		apellido_primero AS ape_p,"
+		        		+ " 	apellido_segundo AS ape_s,"
+		        		+ " 	fecha_nacimiento AS fecha_nac"
+		        		+ " FROM"
+		        		+ " 	ALUMNOS "
+		        		+ " WHERE identificacion = ?";
+
+		        pst = con.prepareStatement(query);
+		        pst.setLong(1, datoClase.getAlumno().getIdentificacion());
+		        rs = pst.executeQuery();
+	        
+		        while (rs.next()) {
+		        	listaAlumnos.add(new Alumno(
+		        			rs.getLong("id"), 
+		        			rs.getString("nombre"), 
+		        			rs.getString("ape_p"), 
+		        			rs.getString("ape_s"),
+		        			rs.getDate("fecha_nac"), 
+		        			rs.getLong("tip_id")));
+	            }
+
+        	
+	        }
 	        return listaAlumnos;
 	    } catch (Exception ex) {
 	    	throw new BussinessException(new BussinessMessage(null, ex.toString()));

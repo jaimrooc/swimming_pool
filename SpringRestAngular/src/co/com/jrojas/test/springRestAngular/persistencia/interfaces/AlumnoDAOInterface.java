@@ -12,5 +12,5 @@ public interface AlumnoDAOInterface {
 	public Alumno get(Long identificacion) throws BussinessException;;
 	public boolean delete(Long idSeguroMedico) throws BussinessException;;
 	public List<Alumno> findAll() throws BussinessException;;
-	
+	public List<Alumno> alumnosPorCurso() throws BussinessException;;
 }

@@ -7,12 +7,15 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.com.jrojas.test.springRestAngular.model.Alumno;
 import co.com.jrojas.test.springRestAngular.model.Clase;
+import co.com.jrojas.test.springRestAngular.model.DatosClases;
+import co.com.jrojas.test.springRestAngular.model.WrapperDatosClaseLite;
 import co.com.jrojas.test.springRestAngular.model.exceptions.BussinessException;
 import co.com.jrojas.test.springRestAngular.model.exceptions.BussinessMessage;
-import co.com.jrojas.test.springRestAngular.persistencia.interfaces.ClaseDAOInterface;
+import co.com.jrojas.test.springRestAngular.persistencia.interfaces.DatosClaseDAOInterface;
 
-public class ClaseDAO implements ClaseDAOInterface {
+public class DatosClaseDAO implements DatosClaseDAOInterface {
 	
 	// JDBC driver name and database URL
    static final String JDBC_DRIVER = "org.postgresql.Driver";  
@@ -22,40 +25,83 @@ public class ClaseDAO implements ClaseDAOInterface {
    static final String USER = "postgres";
    static final String PASS = "Admin123*";
 	
-	@Override
-	public boolean insert(Clase clase) throws BussinessException {
+   
+   
+   @Override
+	public boolean insertarLista(WrapperDatosClaseLite clase) throws BussinessException {
 		Connection con = null;
 	    PreparedStatement pst = null;
 		try {
 			Class.forName(JDBC_DRIVER);
 	        con = DriverManager.getConnection(DB_URL,USER,PASS);
 	        String query = ""
-	        		+ " INSERT INTO CLASES ("
-	        		+ " 	codigo		,"
-	        		+ " 	curso		,"
-	        		+ "		profesor	,"
-	        		+ "		profesor_aux,"
-	        		+ " 	dia			,"
-	        		+ " 	hora_ini	,"
-	        		+ "		hora_fin	,"
-	        		+ " 	estado		)"
+	        		+ " INSERT INTO DATOS_CLASES ("
+	        		+ " 	codigo,"
+	        		+ " 	alumno,"
+	        		+ "		clase)"
 	        		+ " VALUES"
-	        		+ " 	(?,?,?,?,?,?,?,?)";
+	        		+ " 	(?,?,?)";
+			boolean insertoTodos = false;
 			
-	        pst = con.prepareStatement(query);
-	        pst.setInt(1, clase.getCodigo());
-	        pst.setInt(2, clase.getCurso());
-	        pst.setLong(3, clase.getProfesor());
-	        if (clase.getProfesorAux() == null) {
-	        	pst.setNull(4, java.sql.Types.NUMERIC);
-	        } else {
-	        	pst.setLong(4, clase.getProfesorAux());
+			int codigo = 1;
+	        for (Long identificacionAlumno : clase.getAlumnos()) {
+				
+		        pst = con.prepareStatement(query);
+		        pst.setInt(1, codigo);
+		        pst.setLong(2, identificacionAlumno);
+		        pst.setInt(3, clase.getClase());
+		        if (pst.executeUpdate() == 1) {
+		        	insertoTodos = insertoTodos && true;
+		        } else {
+		        	insertoTodos = insertoTodos && false;
+		        }
+		        codigo++;
 	        }
 	        
-	        pst.setString(5, clase.getDiasSemana().entityToDB());
-	        pst.setDate(6,  new java.sql.Date(clase.getHoraIni().getTime()));
-	        pst.setDate(7, new java.sql.Date(clase.getHoraFin().getTime()));
-	        pst.setBoolean(8, clase.getEstado() == null ? true : clase.getEstado());
+	        
+	        if (insertoTodos) {
+	        	return true;
+	        } else {
+	        	return false;
+	        }
+	        
+		} catch (Exception e) {
+			throw new BussinessException(new BussinessMessage(null, e.toString()));
+		} finally {
+			try {
+				if (pst != null)
+					con.close();
+			} catch (Exception se) {
+				System.out.println(se);
+			}
+			try {
+				if (con != null)
+					con.close();
+			} catch (Exception se) {
+				System.out.println(se);
+			}
+		}
+	}
+   
+	@Override
+	public boolean insert(DatosClases datosClases) throws BussinessException {
+		Connection con = null;
+	    PreparedStatement pst = null;
+		try {
+			Class.forName(JDBC_DRIVER);
+	        con = DriverManager.getConnection(DB_URL,USER,PASS);
+	        String query = ""
+	        		+ " INSERT INTO DATOS_CLASES ("
+	        		+ " 	codigo,"
+	        		+ " 	alumno,"
+	        		+ "		clase)"
+	        		+ " VALUES"
+	        		+ " 	(?,?,?)";
+			
+	        pst = con.prepareStatement(query);
+	        pst.setInt(1, datosClases.getCodigo());
+	        pst.setLong(2, datosClases.getAlumno().getIdentificacion());
+	        pst.setInt(3, datosClases.getClase().getCodigo());
 	        if (pst.executeUpdate() == 1) {
 	        	return true;
 	        } else {
@@ -65,7 +111,6 @@ public class ClaseDAO implements ClaseDAOInterface {
 		} catch (Exception e) {
 			throw new BussinessException(new BussinessMessage(null, e.toString()));
 		} finally {
-			// finally block used to close resources
 			try {
 				if (pst != null)
 					con.close();
@@ -82,7 +127,7 @@ public class ClaseDAO implements ClaseDAOInterface {
 	}
 
 	@Override
-	public boolean update(Clase clase) throws BussinessException {
+	public boolean update(DatosClases datosClase) throws BussinessException {
 
 		Connection con = null;
 	    PreparedStatement pst = null;
@@ -90,33 +135,17 @@ public class ClaseDAO implements ClaseDAOInterface {
 			Class.forName(JDBC_DRIVER);
 	        con = DriverManager.getConnection(DB_URL,USER,PASS);
 	        String query = ""
-	        		
-	        		+ " UPDATE CLASES SET "
-	        		+ " 	curso		= ?,"
-	        		+ "		profesor	= ?,"
-	        		+ "		profesor_aux= ?,"
-	        		+ " 	dia			= ?,"
-	        		+ " 	hora_ini	= ?,"
-	        		+ "		hora_fin	= ?,"
-	        		+ "		estado = ?"
+	        		+ " UPDATE DATOS_CLASES SET "
+	        		+ " 	alumno = ?,"
+	        		+ "		clase = ?"
 	        		+ " WHERE "
 	        		+ " 	codigo = ?";
 			
 	        pst = con.prepareStatement(query);
 
-	        pst.setInt(1, clase.getCurso());
-	        pst.setLong(2, clase.getProfesor());
-//	        pst.setLong(3, clase.getProfesorAux());
-	        if (clase.getProfesorAux() == null || clase.getProfesorAux() == 0.0) {
-	        	pst.setNull(3, java.sql.Types.NUMERIC);
-	        } else {
-	        	pst.setLong(3, clase.getProfesorAux());
-	        }
-	        pst.setString(4, clase.getDiasSemana().entityToDB());
-	        pst.setDate(5,  new java.sql.Date(clase.getHoraIni().getTime()));
-	        pst.setDate(6, new java.sql.Date(clase.getHoraFin().getTime()));
-	        pst.setBoolean(7, clase.getEstado() == null ? true : clase.getEstado());
-	        pst.setInt(8, clase.getCodigo());
+	        pst.setLong(1, datosClase.getAlumno().getIdentificacion());
+	        pst.setInt(2, datosClase.getClase().getCodigo());
+	        pst.setInt(3, datosClase.getCodigo());
 	        
 	        if (pst.executeUpdate() == 1) {
 	        	return true;
@@ -144,7 +173,7 @@ public class ClaseDAO implements ClaseDAOInterface {
 	}
 
 	@Override
-	public Clase get(int codigo) throws BussinessException {
+	public DatosClases get(int codigo) throws BussinessException {
 		Connection con = null;
 	    PreparedStatement pst = null;
 	    ResultSet rs = null;
@@ -154,16 +183,11 @@ public class ClaseDAO implements ClaseDAOInterface {
 	        con = DriverManager.getConnection(DB_URL,USER,PASS);
 	        String query = ""
 	        		+ " SELECT"
-	        		+ " 	codigo		 AS cod,"
-	        		+ " 	curso		 AS cur,"
-	        		+ "		profesor	 AS prof,"
-	        		+ "		profesor_aux AS prof_aux,"
-	        		+ " 	dia			 AS dia,"
-	        		+ " 	hora_ini	 AS hr_ini,"
-	        		+ "		hora_fin	 AS hr_fin,"
-	        		+ " 	estado		 AS est"
+	        		+ "		codigo 			 AS cod,"
+	        		+ " 	alumno		 	 AS alu,"
+	        		+ " 	clase			 AS cla"
 	        		+ " FROM"
-	        		+ " 	CLASES "
+	        		+ " 	DATOS_CLASES "
 	        		+ " WHERE"
 	        		+ " 	codigo = ?";
 
@@ -172,15 +196,10 @@ public class ClaseDAO implements ClaseDAOInterface {
 	        rs = pst.executeQuery();
 	        
 	        while (rs.next()) {
-				Clase alumno = new Clase(
-						codigo, 
-						rs.getString("dia"), 
-						rs.getDate("hr_ini"), 
-						rs.getDate("hr_fin"),
-						rs.getBoolean("est"),
-						rs.getInt("cur"),
-						rs.getLong("prof"), 
-						rs.getLong("prof_aux"));
+				DatosClases alumno = new DatosClases(
+						rs.getInt("cod"),
+						new Clase(rs.getInt("cla")),
+						new Alumno(rs.getLong("alu")));
 	        	return alumno;
             }
 	    } catch (Exception ex) {
@@ -212,7 +231,7 @@ public class ClaseDAO implements ClaseDAOInterface {
 			Class.forName(JDBC_DRIVER);
 	        con = DriverManager.getConnection(DB_URL,USER,PASS);
 	        String query = ""
-	        		+ " DELETE FROM CLASES WHERE codigo = ?";
+	        		+ " DELETE FROM DATOS_CLASES WHERE codigo = ?";
 			
 	        pst = con.prepareStatement(query);
 	        pst.setLong(1, codigo);
@@ -242,7 +261,7 @@ public class ClaseDAO implements ClaseDAOInterface {
 	}
 
 	@Override
-	public List<Clase> findAll() throws BussinessException {
+	public List<DatosClases> findAll() throws BussinessException {
 		Connection con = null;
 	    PreparedStatement pst = null;
 	    ResultSet rs = null;
@@ -250,33 +269,23 @@ public class ClaseDAO implements ClaseDAOInterface {
 	    try {
 	    	Class.forName(JDBC_DRIVER);
 	        con = DriverManager.getConnection(DB_URL,USER,PASS);
-	        ArrayList<Clase> listaAlumnos = new ArrayList<>();
+	        ArrayList<DatosClases> listaAlumnos = new ArrayList<>();
 	        String query = ""
 	        		+ " SELECT"
-	        		+ " 	codigo		 AS cod,"
-	        		+ " 	curso		 AS cur,"
-	        		+ "		profesor	 AS prof,"
-	        		+ "		profesor_aux AS prof_aux,"
-	        		+ " 	dia			 AS dia,"
-	        		+ " 	hora_ini	 AS hr_ini,"
-	        		+ "		hora_fin	 AS hr_fin,"
-	        		+ " 	estado		 AS est"
+	        		+ "		codigo 			 AS cod,"
+	        		+ " 	alumno		 	 AS alu,"
+	        		+ " 	clase			 AS cla"
 	        		+ " FROM"
-	        		+ " 	CLASES ";
+	        		+ " 	DATOS_CLASES ";
 	        
 	        pst = con.prepareStatement(query);
 	        rs = pst.executeQuery();
 	        
 	        while (rs.next()) {
-	        	listaAlumnos.add(new Clase(
-						rs.getInt("cod"), 
-						rs.getString("dia"), 
-						rs.getDate("hr_ini"), 
-						rs.getDate("hr_fin"),
-						rs.getBoolean("est"),
-						rs.getInt("cur"),
-						rs.getLong("prof"), 
-						rs.getLong("prof_aux")));
+	        	listaAlumnos.add(new DatosClases(
+						rs.getInt("cod"),
+						new Clase(rs.getInt("cla")),
+						new Alumno(rs.getLong("alu"))));
             }
 	        return listaAlumnos;
 	    } catch (Exception ex) {
