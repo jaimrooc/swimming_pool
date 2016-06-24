@@ -122,7 +122,7 @@ public class AlumnoController {
 	@RequestMapping(value = "/Alumno/list", method = RequestMethod.GET, produces = "application/json")
 	public void alumnosPorCurso(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		try {
-			List<Alumno> segurosMedicos = alumnoDAO.alumnosPorCurso();
+			List<Alumno> segurosMedicos = alumnoDAO.alumnosPorCurso(-1);
 			String jsonSalida = jsonTransformer.toJson(segurosMedicos);
 			
 			httpServletResponse.setStatus(HttpServletResponse.SC_OK);

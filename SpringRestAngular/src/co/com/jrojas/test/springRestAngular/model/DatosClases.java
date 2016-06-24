@@ -2,24 +2,14 @@ package co.com.jrojas.test.springRestAngular.model;
 
 public class DatosClases {
 
-	private Integer codigo;
 	private Clase clase;
 	private Alumno alumno;
 
-	public DatosClases(int codigo, Clase clase, Alumno alumno) {
-		this.codigo = codigo;
+	public DatosClases(Clase clase, Alumno alumno) {
 		this.clase = clase;
 		this.alumno = alumno;
 	}
-
-	public Integer getCodigo() {
-		return codigo;
-	}
-
-	public void setCodigo(Integer codigo) {
-		this.codigo = codigo;
-	}
-
+	
 	public Clase getClase() {
 		return clase;
 	}

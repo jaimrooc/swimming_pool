@@ -275,7 +275,7 @@ public class AlumnoDAO implements AlumnoDAOInterface {
 	}
 
 	@Override
-	public List<Alumno> alumnosPorCurso() throws BussinessException {
+	public List<Alumno> alumnosPorCurso(int codigo) throws BussinessException {
 		Connection con = null;
 	    PreparedStatement pst = null;
 	    ResultSet rs = null;
@@ -286,7 +286,7 @@ public class AlumnoDAO implements AlumnoDAOInterface {
 	        ArrayList<Alumno> listaAlumnos = new ArrayList<>();	  
 	        
 	        DatosClaseDAO datosClaseDAO = new DatosClaseDAO();
-	        for(DatosClases datoClase : datosClaseDAO.findAll()) {
+	        for(DatosClases datoClase : datosClaseDAO.findAllByClass(codigo)) {
 
 	        	
 	        	String query = ""

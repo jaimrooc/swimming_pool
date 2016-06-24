@@ -36,26 +36,21 @@ public class DatosClaseDAO implements DatosClaseDAOInterface {
 	        con = DriverManager.getConnection(DB_URL,USER,PASS);
 	        String query = ""
 	        		+ " INSERT INTO DATOS_CLASES ("
-	        		+ " 	codigo,"
 	        		+ " 	alumno,"
 	        		+ "		clase)"
 	        		+ " VALUES"
-	        		+ " 	(?,?,?)";
+	        		+ " 	(?,?)";
 			boolean insertoTodos = false;
 			
-			int codigo = 1;
 	        for (Long identificacionAlumno : clase.getAlumnos()) {
-				
 		        pst = con.prepareStatement(query);
-		        pst.setInt(1, codigo);
-		        pst.setLong(2, identificacionAlumno);
-		        pst.setInt(3, clase.getClase());
+		        pst.setLong(1, identificacionAlumno);
+		        pst.setInt(2, clase.getClase());
 		        if (pst.executeUpdate() == 1) {
 		        	insertoTodos = insertoTodos && true;
 		        } else {
 		        	insertoTodos = insertoTodos && false;
 		        }
-		        codigo++;
 	        }
 	        
 	        
@@ -92,16 +87,14 @@ public class DatosClaseDAO implements DatosClaseDAOInterface {
 	        con = DriverManager.getConnection(DB_URL,USER,PASS);
 	        String query = ""
 	        		+ " INSERT INTO DATOS_CLASES ("
-	        		+ " 	codigo,"
 	        		+ " 	alumno,"
 	        		+ "		clase)"
 	        		+ " VALUES"
-	        		+ " 	(?,?,?)";
+	        		+ " 	(?,?)";
 			
 	        pst = con.prepareStatement(query);
-	        pst.setInt(1, datosClases.getCodigo());
-	        pst.setLong(2, datosClases.getAlumno().getIdentificacion());
-	        pst.setInt(3, datosClases.getClase().getCodigo());
+	        pst.setLong(1, datosClases.getAlumno().getIdentificacion());
+	        pst.setInt(2, datosClases.getClase().getCodigo());
 	        if (pst.executeUpdate() == 1) {
 	        	return true;
 	        } else {
@@ -128,98 +121,98 @@ public class DatosClaseDAO implements DatosClaseDAOInterface {
 
 	@Override
 	public boolean update(DatosClases datosClase) throws BussinessException {
-
-		Connection con = null;
-	    PreparedStatement pst = null;
-		try {
-			Class.forName(JDBC_DRIVER);
-	        con = DriverManager.getConnection(DB_URL,USER,PASS);
-	        String query = ""
-	        		+ " UPDATE DATOS_CLASES SET "
-	        		+ " 	alumno = ?,"
-	        		+ "		clase = ?"
-	        		+ " WHERE "
-	        		+ " 	codigo = ?";
-			
-	        pst = con.prepareStatement(query);
-
-	        pst.setLong(1, datosClase.getAlumno().getIdentificacion());
-	        pst.setInt(2, datosClase.getClase().getCodigo());
-	        pst.setInt(3, datosClase.getCodigo());
-	        
-	        if (pst.executeUpdate() == 1) {
-	        	return true;
-	        } else {
-	        	return false;
-	        }
-	        
-		} catch (Exception e) {
-			throw new BussinessException(new BussinessMessage(null, e.toString()));
-		} finally {
-			// finally block used to close resources
-			try {
-				if (pst != null)
-					con.close();
-			} catch (Exception se) {
-				System.out.println(se);
-			}
-			try {
-				if (con != null)
-					con.close();
-			} catch (Exception se) {
-				System.out.println(se);
-			}
-		}
+//		Connection con = null;
+//	    PreparedStatement pst = null;
+//		try {
+//			Class.forName(JDBC_DRIVER);
+//	        con = DriverManager.getConnection(DB_URL,USER,PASS);
+//	        String query = ""
+//	        		+ " UPDATE DATOS_CLASES SET "
+//	        		+ " 	alumno = ?,"
+//	        		+ "		clase = ?"
+//	        		+ " WHERE "
+//	        		+ " 	codigo = ?";
+//			
+//	        pst = con.prepareStatement(query);
+//
+//	        pst.setLong(1, datosClase.getAlumno().getIdentificacion());
+//	        pst.setInt(2, datosClase.getClase().getCodigo());
+//	        pst.setInt(3, datosClase.getCodigo());
+//	        
+//	        if (pst.executeUpdate() == 1) {
+//	        	return true;
+//	        } else {
+//	        	return false;
+//	        }
+//	        
+//		} catch (Exception e) {
+//			throw new BussinessException(new BussinessMessage(null, e.toString()));
+//		} finally {
+//			// finally block used to close resources
+//			try {
+//				if (pst != null)
+//					con.close();
+//			} catch (Exception se) {
+//				System.out.println(se);
+//			}
+//			try {
+//				if (con != null)
+//					con.close();
+//			} catch (Exception se) {
+//				System.out.println(se);
+//			}
+//		}
+		return true;
 	}
 
 	@Override
 	public DatosClases get(int codigo) throws BussinessException {
-		Connection con = null;
-	    PreparedStatement pst = null;
-	    ResultSet rs = null;
-
-	    try {
-	    	Class.forName(JDBC_DRIVER);
-	        con = DriverManager.getConnection(DB_URL,USER,PASS);
-	        String query = ""
-	        		+ " SELECT"
-	        		+ "		codigo 			 AS cod,"
-	        		+ " 	alumno		 	 AS alu,"
-	        		+ " 	clase			 AS cla"
-	        		+ " FROM"
-	        		+ " 	DATOS_CLASES "
-	        		+ " WHERE"
-	        		+ " 	codigo = ?";
-
-	        pst = con.prepareStatement(query);
-	        pst.setLong(1, codigo);
-	        rs = pst.executeQuery();
-	        
-	        while (rs.next()) {
-				DatosClases alumno = new DatosClases(
-						rs.getInt("cod"),
-						new Clase(rs.getInt("cla")),
-						new Alumno(rs.getLong("alu")));
-	        	return alumno;
-            }
-	    } catch (Exception ex) {
-	    	throw new BussinessException(new BussinessMessage(null, ex.toString()));
-	    } finally {
-	        try {
-	            if (rs != null) {
-	                rs.close();
-	            }
-	            if (pst != null) {
-	                pst.close();
-	            }
-	            if (con != null) {
-	                con.close();
-	            }
-	        } catch (Exception ex) {
-	            System.out.println("Al cerrar conexiones: " + ex);
-	            return null;
-	        }
-	    }
+//		Connection con = null;
+//	    PreparedStatement pst = null;
+//	    ResultSet rs = null;
+//
+//	    try {
+//	    	Class.forName(JDBC_DRIVER);
+//	        con = DriverManager.getConnection(DB_URL,USER,PASS);
+//	        String query = ""
+//	        		+ " SELECT"
+//	        		+ "		codigo 			 AS cod,"
+//	        		+ " 	alumno		 	 AS alu,"
+//	        		+ " 	clase			 AS cla"
+//	        		+ " FROM"
+//	        		+ " 	DATOS_CLASES "
+//	        		+ " WHERE"
+//	        		+ " 	codigo = ?";
+//
+//	        pst = con.prepareStatement(query);
+//	        pst.setLong(1, codigo);
+//	        rs = pst.executeQuery();
+//	        
+//	        while (rs.next()) {
+//				DatosClases alumno = new DatosClases(
+//						rs.getInt("cod"),
+//						new Clase(rs.getInt("cla")),
+//						new Alumno(rs.getLong("alu")));
+//	        	return alumno;
+//            }
+//	    } catch (Exception ex) {
+//	    	throw new BussinessException(new BussinessMessage(null, ex.toString()));
+//	    } finally {
+//	        try {
+//	            if (rs != null) {
+//	                rs.close();
+//	            }
+//	            if (pst != null) {
+//	                pst.close();
+//	            }
+//	            if (con != null) {
+//	                con.close();
+//	            }
+//	        } catch (Exception ex) {
+//	            System.out.println("Al cerrar conexiones: " + ex);
+//	            return null;
+//	        }
+//	    }
 		return null;
 	}
 
@@ -231,8 +224,7 @@ public class DatosClaseDAO implements DatosClaseDAOInterface {
 			Class.forName(JDBC_DRIVER);
 	        con = DriverManager.getConnection(DB_URL,USER,PASS);
 	        String query = ""
-	        		+ " DELETE FROM DATOS_CLASES WHERE codigo = ?";
-			
+	        		+ " DELETE FROM DATOS_CLASES WHERE clase = ?";
 	        pst = con.prepareStatement(query);
 	        pst.setLong(1, codigo);
 	        
@@ -272,18 +264,73 @@ public class DatosClaseDAO implements DatosClaseDAOInterface {
 	        ArrayList<DatosClases> listaAlumnos = new ArrayList<>();
 	        String query = ""
 	        		+ " SELECT"
-	        		+ "		codigo 			 AS cod,"
-	        		+ " 	alumno		 	 AS alu,"
-	        		+ " 	clase			 AS cla"
+	        		+ " 	*"
 	        		+ " FROM"
-	        		+ " 	DATOS_CLASES ";
+	        		+ " 	ALUMNOS alu"
+	        		+ " WHERE"
+	        		+ " 	alu.identificacion not in (SELECT alumno FROM DATOS_CLASES)";
+
+	        		//	        		+ " SELECT"
+//	        		+ " 	alumno		 	 AS alu,"
+//	        		+ " 	clase			 AS cla"
+//	        		+ " FROM"
+//	        		+ " 	DATOS_CLASES ";
 	        
 	        pst = con.prepareStatement(query);
 	        rs = pst.executeQuery();
 	        
 	        while (rs.next()) {
 	        	listaAlumnos.add(new DatosClases(
-						rs.getInt("cod"),
+						new Clase(rs.getInt("cla")),
+						new Alumno(rs.getLong("alu"))));
+            }
+	        return listaAlumnos;
+	    } catch (Exception ex) {
+	    	throw new BussinessException(new BussinessMessage(null, ex.toString()));
+	    } finally {
+	        try {
+	            if (rs != null) {
+	                rs.close();
+	            }
+	            if (pst != null) {
+	                pst.close();
+	            }
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ex) {
+	            System.out.println("Al cerrar conexiones: " + ex);
+	            return null;
+	        }
+	    }
+	}
+	
+
+
+	@Override
+	public List<DatosClases> findAllByClass(int codigo) throws BussinessException {
+		Connection con = null;
+	    PreparedStatement pst = null;
+	    ResultSet rs = null;
+
+	    try {
+	    	Class.forName(JDBC_DRIVER);
+	        con = DriverManager.getConnection(DB_URL,USER,PASS);
+	        ArrayList<DatosClases> listaAlumnos = new ArrayList<>();
+	        String query = ""
+	        		+ " SELECT"
+	        		+ " 	alumno		 	 AS alu,"
+	        		+ " 	clase			 AS cla"
+	        		+ " FROM"
+	        		+ " 	DATOS_CLASES "
+	        		+ " WHERE clase = ?";
+	        
+	        pst = con.prepareStatement(query);
+	        pst.setInt(1, codigo);
+	        rs = pst.executeQuery();
+	        
+	        while (rs.next()) {
+	        	listaAlumnos.add(new DatosClases(
 						new Clase(rs.getInt("cla")),
 						new Alumno(rs.getLong("alu"))));
             }

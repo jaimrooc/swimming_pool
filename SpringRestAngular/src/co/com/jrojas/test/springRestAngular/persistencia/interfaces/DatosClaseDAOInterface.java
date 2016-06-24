@@ -14,5 +14,6 @@ public interface DatosClaseDAOInterface {
 	public DatosClases get(int codigo) throws BussinessException;
 	public boolean delete(int codigo) throws BussinessException;
 	public List<DatosClases> findAll() throws BussinessException;
+	public List<DatosClases> findAllByClass(int codigo) throws BussinessException;
 	
 }

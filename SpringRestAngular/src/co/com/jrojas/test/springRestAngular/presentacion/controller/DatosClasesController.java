@@ -110,11 +110,11 @@ public class DatosClasesController {
 	@RequestMapping(value = "/DatosClases/list{codigo}", method=RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public void insertarLista(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, @RequestBody String jsonEntrada) {
 		try {
-			
-//			Clase datosClases = (Clase) jsonTransformer.fromJson("["+jsonEntrada+"]", Clase.class);
-			
 			WrapperDatosClaseLite datosClases = (WrapperDatosClaseLite) jsonTransformer.fromJson(jsonEntrada, WrapperDatosClaseLite.class);
-            datosClaseDAO.insertarLista(datosClases);
+			
+			datosClaseDAO.delete(datosClases.getClase());
+            
+			datosClaseDAO.insertarLista(datosClases);
             String jsonSalida=jsonTransformer.toJson(datosClases);
             httpServletResponse.setStatus(HttpServletResponse.SC_OK);
             httpServletResponse.setContentType("application/json; charset=UTF-8");
@@ -161,10 +161,10 @@ public class DatosClasesController {
 		}
 	}
 	
-	@RequestMapping(value = "/DatosClases/list", method = RequestMethod.GET, produces = "application/json")
-	public void findAllAlumnosClase(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+	@RequestMapping(value = "/DatosClases/list/{codigo}", method = RequestMethod.GET, produces = "application/json")
+	public void findAllAlumnosClase(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, @PathVariable("codigo") int codigo) {
 		try {
-			List<Alumno> segurosMedicos = alumnoDAO.alumnosPorCurso();
+			List<Alumno> segurosMedicos = alumnoDAO.alumnosPorCurso(codigo);
 			String jsonSalida = jsonTransformer.toJson(segurosMedicos);
 			
 			httpServletResponse.setStatus(HttpServletResponse.SC_OK);

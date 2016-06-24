@@ -53,8 +53,8 @@
 			<td>{{clase.horaIni | date:'hh:mm'}}</td>
 			<td>{{clase.horaFin | date:'hh:mm'}}</td>
 			<td>{{clase.curso}}</td>
-			<td>{{clase.profesor}}</td>
-			<td>{{clase.profesorAux}}</td>
+			<td>{{(clase.profesor == 0 || clase.profesor == null) ? 'N/A' : clase.profesor}}</td>
+			<td>{{(clase.profesorAux == 0 || clase.profesorAux == null) ? 'N/A' : clase.profesorAux}}</td>
 			<td>
 				<div ng-switch on="clase.estado">
 					<div ng-switch-when="true"><img alt="Is true" src="resources/img/true.png"/></div>
